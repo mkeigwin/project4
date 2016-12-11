@@ -24,12 +24,14 @@ export default class PostItem extends Component{
     })
   }
 
-  renderComments() {
+  renderComments(){
     return this.state.commentsData.map((result, i) =>
       <Comments
         username={result.username}
         textInput={result.textinput}
+        commentId={result.id}
         key={i}
+        deleteComment={this.props.deleteComment}
       />
     )
   }
@@ -51,6 +53,17 @@ export default class PostItem extends Component{
           <iframe id="ytplayer" type="text/html" width="640" height="360"
             src={`https://www.youtube.com/embed/${this.props.postMedia}?autoplay=0&origin=http://example.com`}
             frameborder="0"></iframe>
+          <div className="comment-input-field">
+            <input
+            type="text"
+            placeholder="leave a comment"
+            value={this.props.newComment}
+            onChange={this.props.updateFormNewComment}
+            />
+            <div className="newCommentButton" onClick={this.props.handleNewComment}>
+              Post Comment
+            </div>
+          </div>
           <div>
             {this.renderComments()}
           </div>

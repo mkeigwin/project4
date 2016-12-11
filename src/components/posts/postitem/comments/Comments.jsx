@@ -7,6 +7,7 @@ class Comments extends Component {
       <div>
         <p>{this.props.username}</p>
         <p>{this.props.textInput}</p>
+        <div onClick={() => this.props.deleteComment(this.props.commentId)} className="comment-delete">delete comment</div>
       </div>
     );
   }

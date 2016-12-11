@@ -10,6 +10,10 @@ class Posts extends Component {
     return this.props.postData.map((result, i) =>
       <PostItem
         handleDeletePostFunctions={this.props.handleDeletePostFunctions}
+        deleteComment={this.props.deleteComment}
+        handleNewComment={this.props.handleNewComment}
+        updateFormNewComment={this.props.updateFormNewComment}
+        newComment={this.props.newComment}
         userUserName={this.props.username}
         postUserName={result.username}
         postMedia={result.media}

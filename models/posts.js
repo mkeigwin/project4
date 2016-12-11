@@ -44,10 +44,19 @@ function deletePost(req, res, next) {
   .catch(err => next(err));
 }
 
+function deleteComment(req, res, next) {
+  console.log('the delete comment params is:', req.params.CommentId)
+  db.none(`DELETE FROM comments WHERE id = $1;`, [req.params.CommentId])
+  .then(next())
+  .catch(err => next(err));
+}
+
+
 module.exports = {
   getPostsFromGroup,
   getComments,
   newPost,
   newTags,
-  deletePost
+  deletePost,
+  deleteComment
 };

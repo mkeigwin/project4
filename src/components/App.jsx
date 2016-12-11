@@ -12,6 +12,7 @@ class App extends Component {
     super();
 
     this.state = {
+      newComment: '',
       commentsData: [],
       postData: [],
       usergroups: [],
@@ -84,6 +85,11 @@ class App extends Component {
     })
   };
 
+  updateFormNewComment(e){
+    this.setState({
+      newComment: e.target.value
+    })
+  };
 
 
   handleNewPost() {
@@ -167,6 +173,8 @@ class App extends Component {
     this.handleLogIn();
   }
 
+  // ---------- END RAFA CODE
+
   getUserGroups(username) {
   return fetch(`/usergroups/${username}`, {
     method: 'GET'
@@ -178,7 +186,7 @@ class App extends Component {
     });
   })
   .catch(err => console.log(err));
-}
+  }
 
   handleChooseGroup(GroupId){
     return fetch(`/posts/${GroupId}`, {
@@ -194,7 +202,6 @@ class App extends Component {
   }
 
   deletePost(PostId){
-    console.log('deleting post')
     fetch(`posts/delete/${PostId}`, {
       method: 'delete'
     })
@@ -204,6 +211,21 @@ class App extends Component {
       })
         this.setState({ postData: updatePosts })
         console.log(updatePosts)
+    })
+    .catch(err => console.log(err));
+  }
+
+  deleteComment(commentId){
+    console.log('deleting comment')
+    fetch(`posts/comment/${commentId}`, {
+      method: 'delete'
+    })
+    .then(() => {
+      const updateComments = this.state.commentsData.filter((comment) => {
+        return comment.id !== commentId;
+      })
+        this.setState({ commentsData: updateComments })
+        console.log(updateComments)
     })
     .catch(err => console.log(err));
   }
@@ -256,10 +278,14 @@ class App extends Component {
           handleNewPost={() => this.handleNewPostFunctions()}
         />
         <Posts
+          newComment={this.state.newComment}
+          updateFormNewComment={event => this.updateFormNewComment(event)}
+          handleNewComment={this.handleNewComment.bind(this)}
           postData={this.state.postData}
           commentData={this.state.commentData}
           username={this.state.username}
           handleDeletePostFunctions={this.handleDeletePostFunctions.bind(this)}
+          deleteComment={this.deleteComment.bind(this)}
         />
       </div>
    );

@@ -1,5 +1,5 @@
 const postData = require('express').Router();
-const { getPostsFromGroup, getComments, newPost, newTags, deletePost }  = require('../models/posts');
+const { getPostsFromGroup, getComments, newPost, newTags, deletePost, deleteComment }  = require('../models/posts');
 
 postData.get('/:GroupId', getPostsFromGroup, (req, res) => {
   res.json(res.postData || []);
@@ -14,7 +14,11 @@ postData.post('/newPost', newPost, newTags, (req, res) => {
 });
 
 postData.delete('/delete/:PostId', deletePost, (req, res) => {
-  res.json({message: 'removed'})
+  res.json({message: ' post removed'})
+});
+
+postData.delete('/comment/:CommentId', deleteComment, (req, res) => {
+  res.json({message: 'comment removed'})
 });
 
 module.exports = postData
