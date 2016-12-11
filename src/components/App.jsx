@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import SignUpForm from './signup/Signup.jsx';
 import LogInForm from './login/Login.jsx';
+import Posts from './posts/Posts.jsx';
+import GroupSelect from './groupselect/Groupselect.jsx'
+import MakePost from './makepost/MakePost.jsx'
 import './App.css';
 
 class App extends Component {
@@ -9,9 +12,16 @@ class App extends Component {
     super();
 
     this.state = {
+      commentsData: [],
+      postData: [],
       usergroups: [],
+      group_id: '',
+      newPost: '',
+      tags: '',
+      userGroupSelectDisplay: 'hidden',
       signUpFormDisplay: 'signup-form',
       logInFormDisplay: 'form-container',
+      username: '',
       signup: {
         username: '',
         password: ''
@@ -27,7 +37,6 @@ class App extends Component {
 // Rafa login code:
 
   updateFormSignUpUsername(e) {
-    console.log(e.target.value);
     this.setState({
       signup: {
         username: e.target.value,
@@ -37,7 +46,6 @@ class App extends Component {
   }
 
   updateFormSignUpPassword(e) {
-    console.log(e.target.value);
     this.setState({
       signup: {
         username: this.state.signup.username,
@@ -62,6 +70,50 @@ class App extends Component {
         password: e.target.value
       }
     });
+  };
+
+  updateFormNewPost(e){
+    this.setState({
+      newPost: e.target.value
+    })
+  };
+
+  updateFormTags(e){
+    this.setState({
+      tags: e.target.value
+    })
+  };
+
+
+
+  handleNewPost() {
+    console.log('NEW POST')
+    fetch('/posts/newPost', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        newPost: this.state.newPost,
+        tags: this.state.tags,
+        group_id: this.state.group_id,
+        username: this.state.username
+      })
+    })
+    .then(this.setState({
+      newPost: '',
+      tags: ''
+    }))
+    .catch(err => console.log(err));
+  };
+
+  handleNewPostFunctions() {
+    this.handleNewPost();
+    setTimeout(() => {this.handleChooseGroup(this.state.group_id)}, 300);
+  }
+
+  handleDeletePostFunctions(postId) {
+    this.deletePost(postId);
   }
 
   handleSignUp() {
@@ -84,7 +136,7 @@ class App extends Component {
       signUpFormDisplay: 'hidden'
     }))
     .catch(err => console.log(err));
-  }
+  };
 
   handleLogIn() {
     fetch('/api/auth', {
@@ -116,13 +168,11 @@ class App extends Component {
   }
 
   getUserGroups(username) {
-  console.log('hey i am fetching usergroups for', username)
   return fetch(`/usergroups/${username}`, {
     method: 'GET'
   })
   .then(r => r.json())
   .then((data) => {
-    console.log('$$$ THE USERGROUP DATA IS', data)
     this.setState({
       usergroups: data
     });
@@ -130,12 +180,52 @@ class App extends Component {
   .catch(err => console.log(err));
 }
 
+  handleChooseGroup(GroupId){
+    return fetch(`/posts/${GroupId}`, {
+      method: 'GET'
+    })
+    .then(r => r.json())
+    .then((data) => {
+      this.setState({
+        postData: data,
+        group_id: GroupId
+      });
+    })
+  }
 
+  deletePost(PostId){
+    console.log('deleting post')
+    fetch(`posts/delete/${PostId}`, {
+      method: 'delete'
+    })
+    .then(() => {
+      const updatePosts = this.state.postData.filter((post) => {
+        return post.id !== PostId;
+      })
+        this.setState({ postData: updatePosts })
+        console.log(updatePosts)
+    })
+    .catch(err => console.log(err));
+  }
+
+
+  // handleComments(postId){
+  //   return fetch(`/posts/comments/${postId}`, {
+  //     method: 'GET'
+  //   })
+  //   .then(r => r.json())
+  //   .then((data) => {
+  //     console.log('$$$$$$ the comment data is', data)
+  //     this.setState({
+  //       commentsData: data
+  //     });
+  //   })
+  // }
 
   render(){
     return (
       <div>
-        <p>test working</p>
+        <p> {this.state.username} </p>
         <SignUpForm
           signUpFormDisplay={this.state.signUpFormDisplay}
           signUpUsername={this.state.signup.username}
@@ -152,6 +242,24 @@ class App extends Component {
           updateFormUsername={event => this.updateFormLogInUsername(event)}
           updateFormPassword={event => this.updateFormLogInPassword(event)}
           handleFormSubmit={() => this.handleLogIn()}
+        />
+        <GroupSelect
+          userGroupSelectDisplay={this.state.userGroupSelectDisplay}
+          usergroups={this.state.usergroups}
+          handleChooseGroup={this.handleChooseGroup.bind(this)}
+        />
+        <MakePost
+          newPost={this.state.newPost}
+          tags={this.state.tags}
+          updateFormNewPost={event => this.updateFormNewPost(event)}
+          updateFormTags={event => this.updateFormTags(event)}
+          handleNewPost={() => this.handleNewPostFunctions()}
+        />
+        <Posts
+          postData={this.state.postData}
+          commentData={this.state.commentData}
+          username={this.state.username}
+          handleDeletePostFunctions={this.handleDeletePostFunctions.bind(this)}
         />
       </div>
    );
