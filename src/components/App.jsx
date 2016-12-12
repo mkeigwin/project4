@@ -19,7 +19,6 @@ class App extends Component {
       group_id: '',
       newPost: '',
       tags: '',
-      userGroupSelectDisplay: 'hidden',
       signUpFormDisplay: 'signup-form',
       logInFormDisplay: 'form-container',
       username: '',
@@ -91,37 +90,6 @@ class App extends Component {
     })
   };
 
-
-  handleNewPost() {
-    console.log('NEW POST')
-    fetch('/posts/newPost', {
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        newPost: this.state.newPost,
-        tags: this.state.tags,
-        group_id: this.state.group_id,
-        username: this.state.username
-      })
-    })
-    .then(this.setState({
-      newPost: '',
-      tags: ''
-    }))
-    .catch(err => console.log(err));
-  };
-
-  handleNewPostFunctions() {
-    this.handleNewPost();
-    setTimeout(() => {this.handleChooseGroup(this.state.group_id)}, 300);
-  }
-
-  handleDeletePostFunctions(postId) {
-    this.deletePost(postId);
-  }
-
   handleSignUp() {
     fetch('/api/users', {
       headers: {
@@ -175,6 +143,59 @@ class App extends Component {
 
   // ---------- END RAFA CODE
 
+  handleNewPost() {
+    fetch('/posts/newPost', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        newPost: this.state.newPost,
+        tags: this.state.tags,
+        group_id: this.state.group_id,
+        username: this.state.username
+      })
+    })
+    .then(this.setState({
+      newPost: '',
+      tags: ''
+    }))
+    .catch(err => console.log(err));
+  };
+
+  handleNewComment(postId){
+    console.log('creating new comment to post', postId)
+    fetch('/posts/newComment', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        textinput: this.state.newComment,
+        post_id: postId,
+        username: this.state.username
+      })
+    })
+    .then(this.setState({
+      newComment: '',
+    }))
+    .catch(err => console.log(err));
+  };
+
+  handleNewPostFunctions() {
+    this.handleNewPost();
+    setTimeout(() => {this.handleChooseGroup(this.state.group_id)}, 300);
+  }
+
+  handleDeletePostFunctions(postId) {
+    this.deletePost(postId);
+  }
+
+  handleNewCommentFunctions(postId){
+    this.handleNewComment(postId)
+    setTimeout(() => {this.handleChooseGroup(this.state.group_id)}, 300);
+  }
+
   getUserGroups(username) {
   return fetch(`/usergroups/${username}`, {
     method: 'GET'
@@ -225,11 +246,10 @@ class App extends Component {
         return comment.id !== commentId;
       })
         this.setState({ commentsData: updateComments })
-        console.log(updateComments)
+        console.log('the new comments are:', updateComments)
     })
     .catch(err => console.log(err));
   }
-
 
   // handleComments(postId){
   //   return fetch(`/posts/comments/${postId}`, {
@@ -280,7 +300,7 @@ class App extends Component {
         <Posts
           newComment={this.state.newComment}
           updateFormNewComment={event => this.updateFormNewComment(event)}
-          handleNewComment={this.handleNewComment.bind(this)}
+          handleNewCommentFunctions={this.handleNewCommentFunctions.bind(this)}
           postData={this.state.postData}
           commentData={this.state.commentData}
           username={this.state.username}

@@ -17,7 +17,7 @@ class GroupSelect extends Component {
 
   render(){
     return (
-      <div className={this.props.userGroupSelectDisplay}>
+      <div className="groupSelection">
         {this.renderUserGroups()}
       </div>
     );

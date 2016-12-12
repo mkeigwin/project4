@@ -36,7 +36,7 @@ CREATE TABLE posts (
 
 CREATE TABLE tags (
   id SERIAL PRIMARY KEY,
-  tags VARCHAR(32) NOT NULL
+  name VARCHAR(32) NOT NULL
 );
 
 CREATE TABLE post_tags_xref (

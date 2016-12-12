@@ -60,7 +60,7 @@ export default class PostItem extends Component{
             value={this.props.newComment}
             onChange={this.props.updateFormNewComment}
             />
-            <div className="newCommentButton" onClick={this.props.handleNewComment}>
+            <div className="newCommentButton" onClick={() => this.props.handleNewCommentFunctions(this.props.postId)}>
               Post Comment
             </div>
           </div>

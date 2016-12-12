@@ -6,4 +6,10 @@ iframe {
   border: none;
 }
 
+.groupSelection {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+}
+
 /*# sourceMappingURL=main.css.map*/

@@ -1,5 +1,15 @@
 const db = require('./db.js');
 
+function newComment(req, res, next) {
+  console.log('adding new comment to database:', req.body)
+  db.none(`INSERT INTO comments (textinput, username, post_id) VALUES ($1, $2, $3)`, [req.body.textinput, req.body.username, req.body.post_id])
+    .then(next())
+    .catch((err) => {
+      console.log(err);
+      next(err);
+  });
+}
+
 function newTags(req, res, next) {
   db.none(`INSERT INTO tags (name) VALUES ($1)`, [req.body.tags])
     .then(next())
@@ -10,7 +20,6 @@ function newTags(req, res, next) {
 }
 
 function newPost(req, res, next) {
-  console.log('THE NEW POST BODY IS:', req.body)
   db.none(`INSERT INTO posts (group_id, username, media) VALUES ($1, $2, $3)`, [req.body.group_id, req.body.username, req.body.newPost])
     .then(next())
     .catch((err) => {
@@ -58,5 +67,6 @@ module.exports = {
   newPost,
   newTags,
   deletePost,
-  deleteComment
+  deleteComment,
+  newComment
 };

@@ -11,7 +11,7 @@ class Posts extends Component {
       <PostItem
         handleDeletePostFunctions={this.props.handleDeletePostFunctions}
         deleteComment={this.props.deleteComment}
-        handleNewComment={this.props.handleNewComment}
+        handleNewCommentFunctions={this.props.handleNewCommentFunctions}
         updateFormNewComment={this.props.updateFormNewComment}
         newComment={this.props.newComment}
         userUserName={this.props.username}
