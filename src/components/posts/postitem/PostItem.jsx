@@ -23,7 +23,11 @@ export default class PostItem extends Component {
     const userUserName = this.props.userUserName;
     const postUserName = this.props.postUserName;
     if (userUserName === postUserName ) {
-      return <div className="deletePost" onClick={() => this.props.handleDeletePostFunctions(this.props.postId)}>DELETE</div>;
+      return (
+      <div className="deletePost" onClick={() => this.props.handleDeletePostFunctions(this.props.postId)}>
+        DELETE
+      </div>
+      )
     }
   }
 

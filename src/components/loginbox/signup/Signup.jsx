@@ -9,16 +9,14 @@ class SignUpForm extends Component {
         <input
           type="text"
           placeholder="username"
-          value={this.props.signUpUsername}
-          onChange={this.props.updateFormUsername}
+          onChange={this.props.trackSignupForm}
         />
         <input
           type="password"
           placeholder="password"
-          value={this.props.signUpPassword}
-          onChange={this.props.updateFormPassword}
+          onChange={this.props.trackSignupForm}
         />
-        <div className="formbutton" onClick={this.props.handleFormSubmit}>
+        <div className="formbutton" onClick={this.props.postSignup}>
           register
         </div>
       </div>

@@ -69,5 +69,5 @@ module.exports = {
   newTags,
   deletePost,
   deleteComment,
-  newComment
+  newComment,
 };

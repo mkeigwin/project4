@@ -9,16 +9,14 @@ class LogInForm extends Component {
         <input
           type="text"
           placeholder="username"
-          value={this.props.logInUsername}
-          onChange={this.props.updateFormUsername}
+          onChange={this.props.trackLoginForm}
         />
         <input
           type="password"
           placeholder="password"
-          value={this.props.logInPassword}
-          onChange={this.props.updateFormPassword}
+          onChange={this.props.trackLoginForm}
         />
-        <div className="loginbutton" onClick={this.props.loginFunctions}>
+        <div className="loginbutton" onClick={this.props.handleLoginFuntions}>
           log in
         </div>
       </div>

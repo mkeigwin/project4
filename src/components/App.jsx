@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import SignUpForm from './signup/Signup.jsx';
-import LogInForm from './login/Login.jsx';
 import Posts from './posts/Posts.jsx';
+import Loginbox from './loginbox/Loginbox.jsx';
 import GroupSelect from './groupselect/Groupselect.jsx'
-import MakePost from './makepost/MakePost.jsx'
+import MakePost from './makepost/MakePost.jsx';
+import Searchtags from './searchtags/Searchtags.jsx';
+import Searchgroup from './searchgroup/Searchgroup.jsx';
 import './App.css';
 
 class App extends Component {
@@ -12,6 +13,9 @@ class App extends Component {
     super();
 
     this.state = {
+      searchGroupName: '',
+      createGroupName: '',
+      joinGroupId: '',
       newComment: '',
       newPost: '',
       mediaType: '',
@@ -30,122 +34,152 @@ class App extends Component {
         username: '',
         password: ''
       },
+      currentToken: '',
       hiddenClasses: {
+        loginButton: 'hidden',
+        registerButton: 'registerbutton',
         userNameDisplay: 'hidden',
-        signUpFormDisplay: 'signup-form',
+        signUpFormDisplay: 'hidden',
         logInFormDisplay: 'form-container'
       }
   };
 }
 
-// Rafa login code:
+  // DANIEL PEASE USER AUTH:::::
 
-  updateFormSignUpUsername(e) {
+  trackSignupForm(e) {
+    let fieldsArr = e.target.parentElement.childNodes
     this.setState({
-      signup: {
-        username: e.target.value,
-        password: this.state.signup.password
+      signupForm: {
+        username: fieldsArr[0].value,
+        password: fieldsArr[1].value
       }
-    });
+    }, () => {
+      console.log(this.state)
+    })
   }
 
-  updateFormSignUpPassword(e) {
+  trackLoginForm(e) {
+    let fieldsArr = e.target.parentElement.childNodes
     this.setState({
-      signup: {
-        username: this.state.signup.username,
-        password: e.target.value
+      loginForm: {
+        username: fieldsArr[0].value,
+        password: fieldsArr[1].value
       }
-    });
+    })
   }
 
-  updateFormLogInUsername(e) {
-    this.setState({
-      login: {
-        username: e.target.value,
-        password: this.state.login.password
-      }
-    });
-  }
-
-  updateFormLogInPassword(e) {
-    this.setState({
-      login: {
-        username: this.state.login.username,
-        password: e.target.value
-      }
-    });
-  };
-
-  updateFormNewPost(e){
-    this.setState({
-      newPost: e.target.value
-    })
-  };
-
-  updateFormTags(e){
-    this.setState({
-      tags: e.target.value
-    })
-  };
-
-  updateFormNewComment(e){
-    this.setState({
-      newComment: e.target.value
-    })
-  };
-
-  handleSignUp() {
-    fetch('/api/users', {
+  postSignup() {
+    console.log('clicked')
+    fetch('/user/signup', {
+      method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'content-type': 'application/json',
+        'Authorization': `Bearer ` + this.state.currentToken
+      },
+      body: JSON.stringify({
+        username: this.state.signupForm.username,
+        password: this.state.signupForm.password
+      })
+    })
+    .then((data) => {
+      this.setState({
+        signupForm: {
+          username: '',
+          password: ''
+        }
+      })
+    })
+  }
+
+  postLogin() {
+    console.log('clicked')
+    fetch('/user/login', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: this.state.loginForm.username,
+        password: this.state.loginForm.password
+      })
+    })
+    .then(r => r.json())
+    .then((data) => {
+      this.setState({
+        currentToken: data,
+        username: this.state.loginForm.username,
+        loginForm: {
+          username: '',
+          password: ''
+        }
+      })
+    })
+  }
+
+  logout() {
+    this.setState({
+      currentToken: '',
+    }, () => {
+      console.log('after logout ', this.state)
+    })
+  }
+
+  // ---------- END DANIEL PEASE CODE
+
+  createGroup(){
+    fetch('/usergroups/newGroup', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ` + this.state.currentToken
       },
       method: 'POST',
       body: JSON.stringify({
-        username: this.state.signup.username,
-        password: this.state.signup.password
+        groupname: this.state.createGroupName
       })
-    })
-    .then(this.setState({
-      username: this.state.login.username,
-      signup: {
-        username: '',
-        password: ''
-      },
-      signUpFormDisplay: 'hidden'
-    }))
-    .catch(err => console.log(err));
-  };
+    }
+    )
+      .catch(err => console.log(err));
+  }
 
-  handleLogIn() {
-    fetch('/api/auth', {
+  joinGroup(){
+    console.log('joining group', this.state.joinGroupId)
+    fetch('/usergroups/joinGroup', {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ` + this.state.currentToken
       },
       method: 'POST',
       body: JSON.stringify({
-        username: this.state.login.username,
-        password: this.state.login.password
+        username: this.state.username,
+        group_id: this.state.joinGroupId
       })
     })
     .then(this.setState({
-      username: this.state.login.username,
-      login: {
-        username: '',
-        password: ''
-      },
-      signUpFormDisplay: 'hidden',
-      logInFormDisplay: 'hidden'
+      joinGroupId: ''
     }))
-    .then(this.onSuccessfulLogIn)
     .catch(err => console.log(err));
   }
 
-  loginFunctions(username) {
-    this.getUserGroups(username);
-    this.handleLogIn();
-  }
+  searchGroup(){
+  return fetch(`/usergroups/groups/${this.state.searchGroupName}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ` + this.state.currentToken
+    },
+      method: 'GET'
+    })
+    .then(r => r.json())
+    .then((data) => {
+      console.log('THE DATA FOR SEARCHGROUP IS', data)
+      this.setState({
+        searchGroupName: data[0].name,
+        joinGroupId: data[0].id
+      });
+    })
+    .catch(err => console.log(err));
+    }
 
-  // ---------- END RAFA CODE
 
   sortMediaType() {
     const youtube = /youtube.com/;
@@ -185,7 +219,8 @@ class App extends Component {
   handleNewPost() {
     fetch('/posts/newPost', {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ` + this.state.currentToken
       },
       method: 'POST',
       body: JSON.stringify({
@@ -207,7 +242,8 @@ class App extends Component {
     console.log('creating new comment to post', postId)
     fetch('/posts/newComment', {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ` + this.state.currentToken
       },
       method: 'POST',
       body: JSON.stringify({
@@ -223,6 +259,11 @@ class App extends Component {
     .catch(err => console.log(err));
   };
 
+  handleLoginFuntions(){
+    this.postLogin();
+    setTimeout(() => {this.getUserGroups()}, 1000);
+  }
+
   handleNewPostFunctions() {
     this.sortMediaType();
     setTimeout(() => {this.handleNewPost()}, 100);
@@ -233,19 +274,23 @@ class App extends Component {
     this.deletePost(postId);
   }
 
-
-  getUserGroups(username) {
-  return fetch(`/usergroups/${username}`, {
-    method: 'GET'
-  })
-  .then(r => r.json())
-  .then((data) => {
-    this.setState({
-      usergroups: data
-    });
-  })
-  .catch(err => console.log(err));
-  }
+  getUserGroups() {
+    console.log('gettinguserGroups')
+  return fetch(`/usergroups/${this.state.username}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ` + this.state.currentToken
+    },
+      method: 'GET'
+    })
+    .then(r => r.json())
+    .then((data) => {
+      this.setState({
+        usergroups: data
+      });
+    })
+    .catch(err => console.log(err));
+    }
 
   handleChooseGroupFunctions(GroupId){
     this.handleComments(GroupId);
@@ -254,44 +299,56 @@ class App extends Component {
 
   handleChooseGroup(GroupId){
     return fetch(`/posts/${GroupId}`, {
-      method: 'GET'
-    })
-    .then(r => r.json())
-    .then((data) => {
-      this.setState({
-        postData: data,
-        group_id: GroupId
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ` + this.state.currentToken
+      },
+        method: 'GET'
+      })
+      .then(r => r.json())
+      .then((data) => {
+        this.setState({
+          postData: data,
+          group_id: GroupId
       });
     })
   }
 
   deletePost(PostId){
     fetch(`posts/delete/${PostId}`, {
-      method: 'delete'
-    })
-    .then(() => {
-      const updatePosts = this.state.postData.filter((post) => {
-        return post.id !== PostId;
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ` + this.state.currentToken
+      },
+        method: 'delete'
       })
-        this.setState({ postData: updatePosts })
-        console.log(updatePosts)
-    })
-    .catch(err => console.log(err));
+      .then(() => {
+        const updatePosts = this.state.postData.filter((post) => {
+          return post.id !== PostId;
+        })
+          this.setState({ postData: updatePosts })
+          console.log(updatePosts)
+      })
+      .catch(err => console.log(err));
   }
 
   deleteComment(commentId){
     console.log('deleting comment')
     fetch(`posts/comment/${commentId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ` + this.state.currentToken
+      },
       method: 'delete'
-    })
-    .then(() => {
-      const updateComments = this.state.commentsData.filter((comment) => {
-        return comment.id !== commentId;
       })
-        this.setState({ commentsData: updateComments })
-        console.log('the new comments are:', updateComments)
-    })
-    .catch(err => console.log(err));
+      .then(() => {
+        const updateComments = this.state.commentsData.filter((comment) => {
+          return comment.id !== commentId;
+        })
+          this.setState({ commentsData: updateComments })
+          console.log('the new comments are:', updateComments)
+      })
+      .catch(err => console.log(err));
   }
 
   handleNewCommentFunctions(postId){
@@ -302,6 +359,10 @@ class App extends Component {
 
   handleComments(GroupId){
     return fetch(`/posts/comments/${GroupId}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ` + this.state.currentToken
+      },
       method: 'GET'
     })
     .then(r => r.json())
@@ -312,26 +373,75 @@ class App extends Component {
     })
   }
 
+  handleRegisterButton(){
+    this.setState({
+      hiddenClasses: {
+        loginButton: 'loginbuttonselect',
+        registerButton: 'hidden',
+        userNameDisplay: 'hidden',
+        signUpFormDisplay: 'form-container',
+        logInFormDisplay: 'hidden'
+      }
+    })
+  }
+
+  handleLoginButton(){
+    this.setState({
+      hiddenClasses: {
+        loginButton: 'hidden',
+        registerButton: 'registerbutton',
+        userNameDisplay: 'hidden',
+        signUpFormDisplay: 'hidden',
+        logInFormDisplay: 'form-container'
+      }
+    })
+  }
+
+  trackSearchGroup(e) {
+    let fieldsArr = e.target.parentElement.childNodes
+    console.log('THE TARGET IS', e.target)
+    this.setState({
+      searchGroupName: fieldsArr[0].value
+    }, () => {
+      console.log(this.state)
+    })
+  }
+
+  trackCreateGroup(e) {
+    let fieldsArr = e.target.parentElement.childNodes
+    this.setState({
+      createGroupName: fieldsArr[0].value
+    }, () => {
+      console.log(this.state)
+    })
+  }
+
   render(){
     return (
-      <div>
-        <p className="username-display">user: {this.state.username} </p>
-        <SignUpForm
-          signUpFormDisplay={this.state.signUpFormDisplay}
-          signUpUsername={this.state.signup.username}
-          signUpPassword={this.state.signup.password}
-          updateFormUsername={event => this.updateFormSignUpUsername(event)}
-          updateFormPassword={event => this.updateFormSignUpPassword(event)}
-          handleFormSubmit={() => this.handleSignUp()}
+      <div className="main-container">
+        <p className="username-display">user: {this.props.username} </p>
+        <Loginbox
+          username={this.state.username}
+          signUpFormDisplay={this.state.hiddenClasses.signUpFormDisplay}
+          loginButtonDisplay={this.state.hiddenClasses.loginButton}
+          registerButtonDisplay={this.state.hiddenClasses.registerButton}
+          handleRegisterButton={() => this.handleRegisterButton()}
+          handleLoginButton={() => this.handleLoginButton()}
+          logInFormDisplay={this.state.hiddenClasses.logInFormDisplay}
+          trackSignupForm={this.trackSignupForm.bind(this)}
+          postSignup={this.postSignup.bind(this)}
+          trackLoginForm={this.trackLoginForm.bind(this)}
+          handleLoginFuntions={this.handleLoginFuntions.bind(this)}
+          logout={this.logout.bind(this)}
         />
-        <LogInForm
-          logInFormDisplay={this.state.logInFormDisplay}
-          loginFunctions={() => this.loginFunctions(this.state.login.username)}
-          logInUsername={this.state.login.username}
-          logInPassword={this.state.login.password}
-          updateFormUsername={event => this.updateFormLogInUsername(event)}
-          updateFormPassword={event => this.updateFormLogInPassword(event)}
-          handleFormSubmit={() => this.handleLogIn()}
+        <Searchtags />
+        <Searchgroup
+          joinGroup={this.joinGroup.bind(this)}
+          searchGroupName={this.state.searchGroupName}
+          searchGroup={this.searchGroup.bind(this)}
+          trackSearchGroup={this.trackSearchGroup.bind(this)}
+          createGroup={this.createGroup.bind(this)}
+          trackCreateGroup={this.trackCreateGroup.bind(this)}
         />
         <GroupSelect
           userGroupSelectDisplay={this.state.userGroupSelectDisplay}

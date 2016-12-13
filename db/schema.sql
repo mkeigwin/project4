@@ -11,12 +11,12 @@ DROP TABLE IF EXISTS users CASCADE;
 
 CREATE TABLE groups (
   id SERIAL PRIMARY KEY,
-  name varchar NOT NULL
+  name varchar NOT NULL UNIQUE
 );
 
 CREATE TABLE users (
-  username varchar PRIMARY KEY,
-  password varchar NOT NULL,
+  username varchar PRIMARY KEY UNIQUE,
+  password varchar NOT NULL UNIQUE,
   created_at TIMESTAMP DEFAULT current_timestamp
 );
 
