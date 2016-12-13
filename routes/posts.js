@@ -12,7 +12,7 @@ postData.get('/:GroupId', getPostsFromGroup, (req, res) => {
   res.json(res.postData || []);
 });
 
-postData.get('/comments/:PostId', getComments, (req, res) => {
+postData.get('/comments/:GroupId', getComments, (req, res) => {
   res.json(res.commentsData || []);
 });
 

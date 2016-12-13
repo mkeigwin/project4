@@ -8,8 +8,8 @@ class MakePost extends Component {
       <div className="newPost">
         <input
           type="text"
-          placeholder="create a new post"
-          value={this.props.newPost}
+          placeholder="enter a link to share"
+          value={this.props.newPostMedia}
           onChange={this.props.updateFormNewPost}
         />
         <input

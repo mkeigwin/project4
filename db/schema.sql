@@ -31,6 +31,7 @@ CREATE TABLE posts (
   group_id integer REFERENCES groups(id),
   username varchar REFERENCES users(username),
   media text NOT NULL,
+  mediatype varchar NOT NULL,
   created_at TIMESTAMP DEFAULT current_timestamp
 );
 
@@ -48,6 +49,7 @@ CREATE TABLE post_tags_xref (
 CREATE TABLE comments (
   id SERIAL PRIMARY KEY,
   username varchar REFERENCES users(username),
+  group_id integer REFERENCES groups(id),
   post_id integer REFERENCES posts(id),
   textinput text NOT NULL,
   created_at TIMESTAMP DEFAULT current_timestamp

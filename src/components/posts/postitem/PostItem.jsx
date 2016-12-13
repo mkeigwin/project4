@@ -2,37 +2,20 @@ import React, { Component } from 'react';
 import Comments from '../postitem/comments/Comments.jsx';
 
 
-export default class PostItem extends Component{
-
-  constructor() {
-    super();
-
-    this.state = {
-      commentsData: []
-    }
-  }
-
-  componentWillMount(){
-    return fetch(`/posts/comments/${this.props.postId}`, {
-      method: 'GET'
-    })
-    .then(r => r.json())
-    .then((data) => {
-      this.setState({
-        commentsData: data
-      })
-    })
-  }
+export default class PostItem extends Component {
 
   renderComments(){
-    return this.state.commentsData.map((result, i) =>
-      <Comments
+    return this.props.commentsData.map((result, i) => {
+      return <Comments
+        postId={this.props.postId}
         username={result.username}
+        commentPostId={result.post_id}
         textInput={result.textinput}
         commentId={result.id}
         key={i}
         deleteComment={this.props.deleteComment}
       />
+    }
     )
   }
 
@@ -40,35 +23,56 @@ export default class PostItem extends Component{
     const userUserName = this.props.userUserName;
     const postUserName = this.props.postUserName;
     if (userUserName === postUserName ) {
-      return <div onClick={() => this.props.handleDeletePostFunctions(this.props.postId)}>DELETE</div>;
+      return <div className="deletePost" onClick={() => this.props.handleDeletePostFunctions(this.props.postId)}>DELETE</div>;
     }
   }
 
-  render(){
+  renderMedia(){
+    if (this.props.mediaType === 'youtube'){
+      const link = this.props.postMedia;
+      const parsedLink = link.slice(-11);
+      return <iframe className="posted-video" id="ytplayer" type="text/html" width="750" height="422"
+      src={`https://www.youtube.com/embed/${parsedLink}?autoplay=0&origin=http://example.com`}
+      frameborder="0" />
+    }
+    else if (this.props.mediaType === 'image'){
+      return <img className="posted-image" src={this.props.postMedia} alt="" />
+    }
+    else if (this.props.mediaType === 'vimeo'){
+      const link = this.props.postMedia;
+      const parsedLink = link.slice(-9)
+      console.log(parsedLink);
+      return <iframe className="posted-video" src={`https://player.vimeo.com/video/${parsedLink}`} width="750" height="422" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen />
+    }
+  }
+
+  render() {
     return (
-      <div className="PostItem-Container">
+      <div className="post-container">
         <div>
-          <p>{this.props.postUserName}</p>
+          <div>
+            {this.renderDelete()}
+          </div>
+          <p className="postUserName">{this.props.postUserName}</p>
           <p className="timestamp">{this.props.postTimeStamp}</p>
-          <iframe id="ytplayer" type="text/html" width="640" height="360"
-            src={`https://www.youtube.com/embed/${this.props.postMedia}?autoplay=0&origin=http://example.com`}
-            frameborder="0"></iframe>
+          <div>
+            {this.renderMedia()}
+          </div>
           <div className="comment-input-field">
-            <input
+            <textarea
             type="text"
+            className="leaveComment-input"
+            contenteditable="true"
             placeholder="leave a comment"
             value={this.props.newComment}
             onChange={this.props.updateFormNewComment}
             />
             <div className="newCommentButton" onClick={() => this.props.handleNewCommentFunctions(this.props.postId)}>
-              Post Comment
+              Post
             </div>
           </div>
           <div>
             {this.renderComments()}
-          </div>
-          <div>
-            {this.renderDelete()}
           </div>
         </div>
       </div>

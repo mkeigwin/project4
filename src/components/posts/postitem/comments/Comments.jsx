@@ -2,14 +2,26 @@ import React, { Component } from 'react';
 
 class Comments extends Component {
 
+  renderComment(){
+    if(this.props.postId === this.props.commentPostId){
+      return  (
+        <div>
+          <div className="comment-delete" onClick={() => this.props.deleteComment(this.props.commentId)} className="comment-delete">
+            delete comment
+          </div>
+          <p className="comment-username">{this.props.username}</p>
+          <p className="comment-text">{this.props.textInput}</p>
+        </div>
+      )
+    }
+  }
+
   render(){
-    return (
-      <div>
-        <p>{this.props.username}</p>
-        <p>{this.props.textInput}</p>
-        <div onClick={() => this.props.deleteComment(this.props.commentId)} className="comment-delete">delete comment</div>
-      </div>
-    );
+      return (
+        <div>
+          {this.renderComment()}
+        </div>
+      );
   }
 }
 

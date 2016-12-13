@@ -2,7 +2,7 @@ const db = require('./db.js');
 
 function newComment(req, res, next) {
   console.log('adding new comment to database:', req.body)
-  db.none(`INSERT INTO comments (textinput, username, post_id) VALUES ($1, $2, $3)`, [req.body.textinput, req.body.username, req.body.post_id])
+  db.none(`INSERT INTO comments (textinput, username, post_id, group_id) VALUES ($1, $2, $3, $4)`, [req.body.textinput, req.body.username, req.body.post_id, req.body.group_id])
     .then(next())
     .catch((err) => {
       console.log(err);
@@ -20,7 +20,8 @@ function newTags(req, res, next) {
 }
 
 function newPost(req, res, next) {
-  db.none(`INSERT INTO posts (group_id, username, media) VALUES ($1, $2, $3)`, [req.body.group_id, req.body.username, req.body.newPost])
+  console.log(req.body)
+  db.none(`INSERT INTO posts (group_id, username, media, mediatype) VALUES ($1, $2, $3, $4)`, [req.body.group_id, req.body.username, req.body.newPost, req.body.mediaType])
     .then(next())
     .catch((err) => {
       console.log(err);
@@ -38,7 +39,7 @@ function getPostsFromGroup(req, res, next) {
 }
 
 function getComments(req, res, next) {
- db.any(`SELECT * FROM comments WHERE post_id = $1;`, [req.params.PostId])
+ db.any(`SELECT * FROM comments WHERE group_id = $1;`, [req.params.GroupId])
  .then((data) => {
    res.commentsData = data;
    next();

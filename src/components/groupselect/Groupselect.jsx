@@ -7,7 +7,7 @@ class GroupSelect extends Component {
   renderUserGroups() {
     return this.props.usergroups.map((result, i) =>
       <GroupSelectItem
-        handleChooseGroup={this.props.handleChooseGroup}
+        handleChooseGroupFunctions={this.props.handleChooseGroupFunctions}
         GroupId={result.group_id}
         GroupName={result.name}
         key={i}

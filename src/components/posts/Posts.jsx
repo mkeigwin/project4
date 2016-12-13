@@ -9,6 +9,8 @@ class Posts extends Component {
   renderPosts() {
     return this.props.postData.map((result, i) =>
       <PostItem
+        GroupId={this.props.GroupId}
+        mediaType={result.mediatype}
         handleDeletePostFunctions={this.props.handleDeletePostFunctions}
         deleteComment={this.props.deleteComment}
         handleNewCommentFunctions={this.props.handleNewCommentFunctions}
@@ -19,7 +21,7 @@ class Posts extends Component {
         postMedia={result.media}
         postTimeStamp={result.created_at}
         postId={result.id}
-        commentData={this.props.commentData}
+        commentsData={this.props.commentsData}
         key={i}
       />
       )

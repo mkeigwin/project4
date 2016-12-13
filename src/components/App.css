@@ -1,3 +1,10 @@
+.post-container {
+  width: 760px;
+  margin: 0 auto 100px auto;
+  position: relative;
+  text-align: center;
+}
+
 .timestamp {
   font-size: 12px;
 }
@@ -6,8 +13,85 @@ iframe {
   border: none;
 }
 
+.deletePost {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  font-size: 10px;
+  cursor: pointer;
+  cursor: hand;
+}
+
 .groupSelection {
   position: absolute;
   top: 50px;
+  right: 50px;
+}
+
+.comment-input-field {
+  margin: 10px 0 0 0;
+}
+
+.leaveComment-input {
+  margin-top: 15px;
+  width: 350px;
+  height: 30px;
+  left: 20px;
+  text-align: top;
+  position: relative;
+  left: -72px;
+}
+
+.postUserName {
+  position: relative;
+  left: -365px;
+  font-style: italic;
+}
+
+.timestamp {
+  text-align: left;
+}
+
+.newCommentButton {
+  position: relative;
+  left: 130px;
+  bottom: 0px;
+  cursor: pointer;
+  cursor: hand;
+  width: 25px;
+}
+
+.posted-image {
+  max-height: 500px;
+  max-width: 750px;
+
+}
+
+.posted-video {
+  box-shadow: 3px 5px 8px -1px rgba( 15, 15, 15, .8 ), -3px 5px 8px -1px rgba( 15, 15, 15, .8 );
+}
+
+.comment-username {
+  position: relative;
+  font-size: 14px;
+  font-style: italic;
+  left: 130px;
+  width: 100px;
+  margin: 0;
+  text-align: left;
+}
+
+.comment-text {
+  position: relative;
+  font-size: 14px;
+  left: 130px;
+  width: 400px;
+  margin: 0;
+  text-align: left;
+}
+
+.comment-delete {
+  position: relative;
+  top: 0px;
   right: 50px;
 }

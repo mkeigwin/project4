@@ -13,14 +13,13 @@ class App extends Component {
 
     this.state = {
       newComment: '',
+      newPost: '',
+      mediaType: '',
       commentsData: [],
       postData: [],
       usergroups: [],
       group_id: '',
-      newPost: '',
       tags: '',
-      signUpFormDisplay: 'signup-form',
-      logInFormDisplay: 'form-container',
       username: '',
       signup: {
         username: '',
@@ -31,6 +30,11 @@ class App extends Component {
         username: '',
         password: ''
       },
+      hiddenClasses: {
+        userNameDisplay: 'hidden',
+        signUpFormDisplay: 'signup-form',
+        logInFormDisplay: 'form-container'
+      }
   };
 }
 
@@ -143,6 +147,41 @@ class App extends Component {
 
   // ---------- END RAFA CODE
 
+  sortMediaType() {
+    const youtube = /youtube.com/;
+    const youtube2 = /youtu.be/;
+    const gif = /.gif/;
+    const png = /.png/;
+    const jpg = /.jpg/;
+    const jpeg = /.jpeg/;
+    const svg = /.svg/;
+    const vimeo = /vimeo.com/;
+    const soundcloud = /soundcloud.com/;
+
+    if(youtube.test(this.state.newPost) || youtube2.test(this.state.newPost)){
+      this.setState({
+        mediaType: 'youtube'
+      })
+    } else if (
+      gif.test(this.state.newPost) ||
+      png.test(this.state.newPost) ||
+      jpg.test(this.state.newPost) ||
+      jpeg.test(this.state.newPost) ||
+      svg.test(this.state.newPost)){
+      this.setState({
+        mediaType: 'image'
+      })
+    } else if ( vimeo.test(this.state.newPost)){
+      this.setState({
+        mediaType: 'vimeo'
+      })
+    } else if ( soundcloud.test(this.state.newPost)){
+      this.setState({
+        mediaType: 'soundcloud'
+      })
+    }
+  };
+
   handleNewPost() {
     fetch('/posts/newPost', {
       headers: {
@@ -153,7 +192,8 @@ class App extends Component {
         newPost: this.state.newPost,
         tags: this.state.tags,
         group_id: this.state.group_id,
-        username: this.state.username
+        username: this.state.username,
+        mediaType: this.state.mediaType
       })
     })
     .then(this.setState({
@@ -173,7 +213,8 @@ class App extends Component {
       body: JSON.stringify({
         textinput: this.state.newComment,
         post_id: postId,
-        username: this.state.username
+        username: this.state.username,
+        group_id: this.state.group_id
       })
     })
     .then(this.setState({
@@ -183,18 +224,15 @@ class App extends Component {
   };
 
   handleNewPostFunctions() {
-    this.handleNewPost();
-    setTimeout(() => {this.handleChooseGroup(this.state.group_id)}, 300);
+    this.sortMediaType();
+    setTimeout(() => {this.handleNewPost()}, 100);
+    setTimeout(() => {this.handleChooseGroupFunctions(this.state.group_id)}, 200);
   }
 
   handleDeletePostFunctions(postId) {
     this.deletePost(postId);
   }
 
-  handleNewCommentFunctions(postId){
-    this.handleNewComment(postId)
-    setTimeout(() => {this.handleChooseGroup(this.state.group_id)}, 300);
-  }
 
   getUserGroups(username) {
   return fetch(`/usergroups/${username}`, {
@@ -207,6 +245,11 @@ class App extends Component {
     });
   })
   .catch(err => console.log(err));
+  }
+
+  handleChooseGroupFunctions(GroupId){
+    this.handleComments(GroupId);
+    this.handleChooseGroup(GroupId);
   }
 
   handleChooseGroup(GroupId){
@@ -251,23 +294,28 @@ class App extends Component {
     .catch(err => console.log(err));
   }
 
-  // handleComments(postId){
-  //   return fetch(`/posts/comments/${postId}`, {
-  //     method: 'GET'
-  //   })
-  //   .then(r => r.json())
-  //   .then((data) => {
-  //     console.log('$$$$$$ the comment data is', data)
-  //     this.setState({
-  //       commentsData: data
-  //     });
-  //   })
-  // }
+  handleNewCommentFunctions(postId){
+    this.handleNewComment(postId)
+    setTimeout(() => {this.handleChooseGroupFunctions(this.state.group_id)}, 300);
+  }
+
+
+  handleComments(GroupId){
+    return fetch(`/posts/comments/${GroupId}`, {
+      method: 'GET'
+    })
+    .then(r => r.json())
+    .then((data) => {
+      this.setState({
+        commentsData: data
+      });
+    })
+  }
 
   render(){
     return (
       <div>
-        <p> {this.state.username} </p>
+        <p className="username-display">user: {this.state.username} </p>
         <SignUpForm
           signUpFormDisplay={this.state.signUpFormDisplay}
           signUpUsername={this.state.signup.username}
@@ -288,21 +336,22 @@ class App extends Component {
         <GroupSelect
           userGroupSelectDisplay={this.state.userGroupSelectDisplay}
           usergroups={this.state.usergroups}
-          handleChooseGroup={this.handleChooseGroup.bind(this)}
+          handleChooseGroupFunctions={this.handleChooseGroupFunctions.bind(this)}
         />
         <MakePost
-          newPost={this.state.newPost}
+          newPost={this.state.newPostMedia}
           tags={this.state.tags}
           updateFormNewPost={event => this.updateFormNewPost(event)}
           updateFormTags={event => this.updateFormTags(event)}
           handleNewPost={() => this.handleNewPostFunctions()}
         />
         <Posts
+          GroupId={this.state.group_id}
           newComment={this.state.newComment}
           updateFormNewComment={event => this.updateFormNewComment(event)}
           handleNewCommentFunctions={this.handleNewCommentFunctions.bind(this)}
           postData={this.state.postData}
-          commentData={this.state.commentData}
+          commentsData={this.state.commentsData}
           username={this.state.username}
           handleDeletePostFunctions={this.handleDeletePostFunctions.bind(this)}
           deleteComment={this.deleteComment.bind(this)}
