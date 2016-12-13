@@ -29,19 +29,20 @@ class App extends Component {
         username: '',
         password: ''
       },
+      currentToken: '',
       login: {
         loggedIn: false,
         username: '',
         password: ''
       },
-      currentToken: '',
-      hiddenClasses: {
-        loginButton: 'hidden',
-        registerButton: 'registerbutton',
-        userNameDisplay: 'hidden',
-        signUpFormDisplay: 'hidden',
-        logInFormDisplay: 'form-container'
-      }
+      loginButton: 'hidden',
+      registerButton: 'registerbutton',
+      userNameDisplay: 'hidden',
+      signUpFormDisplay: 'hidden',
+      logInFormDisplay: 'form-container',
+      loginContainer: 'loginContainer',
+      searchjoingroupbar: 'hidden',
+      clicktojoin: 'hidden'
   };
 }
 
@@ -108,6 +109,7 @@ class App extends Component {
     .then((data) => {
       this.setState({
         currentToken: data,
+        loginContainer: 'hidden',
         username: this.state.loginForm.username,
         loginForm: {
           username: '',
@@ -126,6 +128,13 @@ class App extends Component {
   }
 
   // ---------- END DANIEL PEASE CODE
+
+
+  updateFormNewPost(e){
+    this.setState({
+      newPost: e.target.value
+    });
+  }
 
   createGroup(){
     fetch('/usergroups/newGroup', {
@@ -174,7 +183,8 @@ class App extends Component {
       console.log('THE DATA FOR SEARCHGROUP IS', data)
       this.setState({
         searchGroupName: data[0].name,
-        joinGroupId: data[0].id
+        joinGroupId: data[0].id,
+        clicktojoin: 'clicktojoin'
       });
     })
     .catch(err => console.log(err));
@@ -356,7 +366,6 @@ class App extends Component {
     setTimeout(() => {this.handleChooseGroupFunctions(this.state.group_id)}, 300);
   }
 
-
   handleComments(GroupId){
     return fetch(`/posts/comments/${GroupId}`, {
       headers: {
@@ -375,25 +384,21 @@ class App extends Component {
 
   handleRegisterButton(){
     this.setState({
-      hiddenClasses: {
-        loginButton: 'loginbuttonselect',
-        registerButton: 'hidden',
-        userNameDisplay: 'hidden',
-        signUpFormDisplay: 'form-container',
-        logInFormDisplay: 'hidden'
-      }
+      loginButton: 'loginbuttonselect',
+      registerButton: 'hidden',
+      userNameDisplay: 'hidden',
+      signUpFormDisplay: 'form-container',
+      logInFormDisplay: 'hidden'
     })
   }
 
   handleLoginButton(){
     this.setState({
-      hiddenClasses: {
-        loginButton: 'hidden',
-        registerButton: 'registerbutton',
-        userNameDisplay: 'hidden',
-        signUpFormDisplay: 'hidden',
-        logInFormDisplay: 'form-container'
-      }
+      loginButton: 'hidden',
+      registerButton: 'registerbutton',
+      userNameDisplay: 'hidden',
+      signUpFormDisplay: 'hidden',
+      logInFormDisplay: 'form-container'
     })
   }
 
@@ -416,18 +421,27 @@ class App extends Component {
     })
   }
 
+  opengroupfinder(){
+    console.log('hello')
+    this.setState({
+      searchjoingroupbar: 'searchjoingroupbar'
+    })
+  }
+
   render(){
     return (
       <div className="main-container">
-        <p className="username-display">user: {this.props.username} </p>
+        <div className="groupheaderbutton" onClick={() => this.opengroupfinder()}>create/find a group</div>
+        <p className="username-display">{this.state.username}</p>
         <Loginbox
           username={this.state.username}
-          signUpFormDisplay={this.state.hiddenClasses.signUpFormDisplay}
-          loginButtonDisplay={this.state.hiddenClasses.loginButton}
-          registerButtonDisplay={this.state.hiddenClasses.registerButton}
+          signUpFormDisplay={this.state.signUpFormDisplay}
+          loginButtonDisplay={this.state.loginButton}
+          registerButtonDisplay={this.state.registerButton}
+          loginFormDisplay={this.state.logInFormDisplay}
+          loginContainer={this.state.loginContainer}
           handleRegisterButton={() => this.handleRegisterButton()}
           handleLoginButton={() => this.handleLoginButton()}
-          logInFormDisplay={this.state.hiddenClasses.logInFormDisplay}
           trackSignupForm={this.trackSignupForm.bind(this)}
           postSignup={this.postSignup.bind(this)}
           trackLoginForm={this.trackLoginForm.bind(this)}
@@ -436,6 +450,10 @@ class App extends Component {
         />
         <Searchtags />
         <Searchgroup
+          closewindow
+          deleteicon={this.state.deleteicon}
+          clicktojoin={this.state.clicktojoin}
+          searchjoingroupbar={this.state.searchjoingroupbar}
           joinGroup={this.joinGroup.bind(this)}
           searchGroupName={this.state.searchGroupName}
           searchGroup={this.searchGroup.bind(this)}

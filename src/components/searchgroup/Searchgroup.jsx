@@ -4,7 +4,7 @@ class Searchgroup extends Component {
 
   render(){
     return (
-      <div className="searchjoingroupbar">
+      <div className={this.props.searchjoingroupbar}>
         <div className="creategroupbar">
           <input
           type="text"
@@ -26,13 +26,12 @@ class Searchgroup extends Component {
           </div>
         </div>
         <div className="foundgroupsbar">
-          <p className="clicktojoin">
+          <p className={this.props.clicktojoin}>
             <span onClick={this.props.joinGroup}>
               {this.props.searchGroupName}
             </span>
             click to join
           </p>
-
         </div>
       </div>
     );

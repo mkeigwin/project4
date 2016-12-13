@@ -7,16 +7,46 @@ header {
   position: relative;
   height: 50px;
   width: 100%;
-  background-color: black;
-  color: white;
+  border: 1px solid black;
   top: 0;
+  z-index: -5;
 }
 
 span {
   border: 1px solid black;
   margin: 0 4px 0 4px;
   padding: 2px;
+  cursor: pointer;
+  cursor: hand;
+  -webkit-animation-name: tada;
+  animation-name: tada;
 }
+
+.clicktojoin {
+  margin: 7px;
+}
+
+.searchjoingroupbar {
+  padding: 15px;
+  width: 200px;
+  height: 100px;
+  border: 1px solid black;
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  -webkit-box-shadow: 0 0 10px #fff;
+  box-shadow: 0 0 10px #fff;
+}
+
+.username-display {
+  position: absolute;
+  width: 74px;
+  top: 20px;
+  right: 74px;
+  font-style: italic;
+  font-size: 22px;
+}
+
 
 .hidden {
   display: none;
@@ -31,7 +61,12 @@ span {
   color: black;
   position: relative;
   bottom: 64px;
-  right: -249px;
+  right: -122px;
+  cursor: pointer;
+  cursor: hand;
+}
+
+.loginbutton{
   cursor: pointer;
   cursor: hand;
 }
@@ -40,7 +75,7 @@ span {
   color: black;
   position: relative;
   bottom: 64px;
-  right: -266px;
+  right: -133px;
   cursor: pointer;
   cursor: hand;
 }
@@ -62,6 +97,7 @@ span {
   color: white;
   width: 300px;
   height: 90px;
+  text-align: center;
 }
 
 .searchbar {
@@ -77,7 +113,7 @@ span {
 
 .post-container {
   width: 760px;
-  margin: 0 auto 100px auto;
+  margin: 75px auto 75px auto;
   position: relative;
   text-align: center;
 }
@@ -179,12 +215,81 @@ iframe {
   text-align: left;
 }
 
+.groupheaderbutton{
+  cursor: pointer;
+  cursor: hand;
+  font-size: 13px;
+  border: 1px solid black;
+  z-index: 5;
+}
+
 .comment-delete {
   position: relative;
   top: 0px;
   right: 133px;
   font-size: 12px;
   text-align: right;
+}
+
+/* KEYFRAMES FROM https://github.com/daneden/animate.css/blob/master/animate.css */
+
+@-webkit-keyframes tada {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  10%, 20% {
+    -webkit-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+  }
+
+  30%, 50%, 70%, 90% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+  }
+
+  40%, 60%, 80% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes tada {
+  from {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  10%, 20% {
+    -webkit-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+  }
+
+  30%, 50%, 70%, 90% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+  }
+
+  40%, 60%, 80% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+
+  to {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.tada {
+  -webkit-animation-name: tada;
+  animation-name: tada;
 }
 
 /*# sourceMappingURL=main.css.map*/

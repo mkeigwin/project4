@@ -7,7 +7,7 @@ class Header extends Component {
 
   render(){
     return (
-      <div className="loginContainer">
+      <div className={this.props.loginContainer}>
         <SignUpForm
           signUpFormDisplay={this.props.signUpFormDisplay}
           trackSignupForm={this.props.trackSignupForm}
@@ -17,6 +17,7 @@ class Header extends Component {
           trackLoginForm={this.props.trackLoginForm}
           handleLoginFuntions={this.props.handleLoginFuntions}
           logout={this.props.logout}
+          loginFormDisplay={this.props.loginFormDisplay}
         />
         <div className={this.props.registerButtonDisplay} onClick={() => this.props.handleRegisterButton()}>
           register

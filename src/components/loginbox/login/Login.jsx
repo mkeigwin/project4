@@ -5,7 +5,7 @@ class LogInForm extends Component {
 
   render(){
     return (
-      <div className={this.props.logInFormDisplay}>
+      <div className={this.props.loginFormDisplay}>
         <input
           type="text"
           placeholder="username"
