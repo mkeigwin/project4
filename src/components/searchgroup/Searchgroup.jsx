@@ -5,6 +5,9 @@ class Searchgroup extends Component {
   render(){
     return (
       <div className={this.props.searchjoingroupbar}>
+        <div onClick={this.props.closegroupsearchwindow}>
+          <img className="groupsearchdeleteicon" src={this.props.deleteicon} alt=""/>
+        </div>
         <div className="creategroupbar">
           <input
           type="text"

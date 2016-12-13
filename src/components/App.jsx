@@ -5,6 +5,8 @@ import GroupSelect from './groupselect/Groupselect.jsx'
 import MakePost from './makepost/MakePost.jsx';
 import Searchtags from './searchtags/Searchtags.jsx';
 import Searchgroup from './searchgroup/Searchgroup.jsx';
+import Deleteicon from '../images/deleteicon.png';
+import Deleteiconwhite from '../images/deleteiconwhite.png';
 import './App.css';
 
 class App extends Component {
@@ -13,6 +15,8 @@ class App extends Component {
     super();
 
     this.state = {
+      deleteiconwhite: Deleteiconwhite,
+      deleteicon: Deleteicon,
       searchGroupName: '',
       createGroupName: '',
       joinGroupId: '',
@@ -42,7 +46,13 @@ class App extends Component {
       logInFormDisplay: 'form-container',
       loginContainer: 'loginContainer',
       searchjoingroupbar: 'hidden',
-      clicktojoin: 'hidden'
+      clicktojoin: 'hidden',
+      groupheaderbutton: 'hidden',
+      newPostContainer: 'hidden',
+      searchHiddenItems: '',
+      searchbar: 'searchbar',
+      searchpagecontent: 'hidden'
+
   };
 }
 
@@ -88,7 +98,9 @@ class App extends Component {
         signupForm: {
           username: '',
           password: ''
-        }
+        },
+        signUpFormDisplay: 'hidden',
+        logInFormDisplay: 'form-container'
       })
     })
   }
@@ -110,6 +122,7 @@ class App extends Component {
       this.setState({
         currentToken: data,
         loginContainer: 'hidden',
+        groupheaderbutton: 'groupheaderbutton',
         username: this.state.loginForm.username,
         loginForm: {
           username: '',
@@ -134,6 +147,12 @@ class App extends Component {
     this.setState({
       newPost: e.target.value
     });
+  }
+
+  updateFormNewComment(e){
+    this.setState({
+      newComment: e.target.value
+    })
   }
 
   createGroup(){
@@ -249,7 +268,7 @@ class App extends Component {
   };
 
   handleNewComment(postId){
-    console.log('creating new comment to post', postId)
+    console.log('creating new comment to post', this.state.newComment)
     fetch('/posts/newComment', {
       headers: {
         'Content-Type': 'application/json',
@@ -319,7 +338,8 @@ class App extends Component {
       .then((data) => {
         this.setState({
           postData: data,
-          group_id: GroupId
+          group_id: GroupId,
+          newPostContainer: 'newPost'
       });
     })
   }
@@ -422,16 +442,40 @@ class App extends Component {
   }
 
   opengroupfinder(){
-    console.log('hello')
     this.setState({
       searchjoingroupbar: 'searchjoingroupbar'
     })
   }
 
+  closegroupsearchwindow(){
+    this.setState({
+      searchjoingroupbar: 'hidden'
+    })
+  }
+
+  searchButton(){
+    this.setState({
+      searchHiddenItems: 'hidden',
+      searchbar: 'searchpage'
+    })
+    setTimeout(()=>{this.setState({
+      searchpagecontent: 'searchpagecontent'
+    })}, 1100)
+  }
+
+  exitblackpage(){
+    this.setState({
+      searchpagecontent: 'hidden',
+      searchbar: 'searchbar'
+    })
+    setTimeout(()=>{this.setState({
+      searchHiddenItems: ''
+    })}, 1100)
+  }
+
   render(){
     return (
       <div className="main-container">
-        <div className="groupheaderbutton" onClick={() => this.opengroupfinder()}>create/find a group</div>
         <p className="username-display">{this.state.username}</p>
         <Loginbox
           username={this.state.username}
@@ -448,42 +492,52 @@ class App extends Component {
           handleLoginFuntions={this.handleLoginFuntions.bind(this)}
           logout={this.logout.bind(this)}
         />
-        <Searchtags />
-        <Searchgroup
-          closewindow
-          deleteicon={this.state.deleteicon}
-          clicktojoin={this.state.clicktojoin}
-          searchjoingroupbar={this.state.searchjoingroupbar}
-          joinGroup={this.joinGroup.bind(this)}
-          searchGroupName={this.state.searchGroupName}
-          searchGroup={this.searchGroup.bind(this)}
-          trackSearchGroup={this.trackSearchGroup.bind(this)}
-          createGroup={this.createGroup.bind(this)}
-          trackCreateGroup={this.trackCreateGroup.bind(this)}
+        <Searchtags
+          exitblackpage={this.exitblackpage.bind(this)}
+          deleteiconwhite={this.state.deleteiconwhite}
+          searchpagecontent={this.state.searchpagecontent}
+          searchbar={this.state.searchbar}
+          searchButton={this.searchButton.bind(this)}
         />
         <GroupSelect
           userGroupSelectDisplay={this.state.userGroupSelectDisplay}
           usergroups={this.state.usergroups}
           handleChooseGroupFunctions={this.handleChooseGroupFunctions.bind(this)}
         />
-        <MakePost
-          newPost={this.state.newPostMedia}
-          tags={this.state.tags}
-          updateFormNewPost={event => this.updateFormNewPost(event)}
-          updateFormTags={event => this.updateFormTags(event)}
-          handleNewPost={() => this.handleNewPostFunctions()}
-        />
-        <Posts
-          GroupId={this.state.group_id}
-          newComment={this.state.newComment}
-          updateFormNewComment={event => this.updateFormNewComment(event)}
-          handleNewCommentFunctions={this.handleNewCommentFunctions.bind(this)}
-          postData={this.state.postData}
-          commentsData={this.state.commentsData}
-          username={this.state.username}
-          handleDeletePostFunctions={this.handleDeletePostFunctions.bind(this)}
-          deleteComment={this.deleteComment.bind(this)}
-        />
+        <div className={this.state.searchHiddenItems}>
+          <div className={this.state.groupheaderbutton} onClick={() => this.opengroupfinder()}>create/find a group</div>
+          <Searchgroup
+            closegroupsearchwindow={()=> this.closegroupsearchwindow()}
+            deleteicon={this.state.deleteicon}
+            clicktojoin={this.state.clicktojoin}
+            searchjoingroupbar={this.state.searchjoingroupbar}
+            joinGroup={this.joinGroup.bind(this)}
+            searchGroupName={this.state.searchGroupName}
+            searchGroup={this.searchGroup.bind(this)}
+            trackSearchGroup={this.trackSearchGroup.bind(this)}
+            createGroup={this.createGroup.bind(this)}
+            trackCreateGroup={this.trackCreateGroup.bind(this)}
+          />
+          <MakePost
+            newPostContainer={this.state.newPostContainer}
+            newPost={this.state.newPostMedia}
+            tags={this.state.tags}
+            updateFormNewPost={event => this.updateFormNewPost(event)}
+            updateFormTags={event => this.updateFormTags(event)}
+            handleNewPost={() => this.handleNewPostFunctions()}
+          />
+          <Posts
+            GroupId={this.state.group_id}
+            newComment={this.state.newComment}
+            updateFormNewComment={event => this.updateFormNewComment(event)}
+            handleNewCommentFunctions={this.handleNewCommentFunctions.bind(this)}
+            postData={this.state.postData}
+            commentsData={this.state.commentsData}
+            username={this.state.username}
+            handleDeletePostFunctions={this.handleDeletePostFunctions.bind(this)}
+            deleteComment={this.deleteComment.bind(this)}
+          />
+        </div>
       </div>
    );
  }
