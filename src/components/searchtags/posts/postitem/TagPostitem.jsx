@@ -36,7 +36,7 @@ export default class PostItem extends Component {
 
   render() {
     return (
-      <div className="post-container">
+      <div className="tag-post-container">
         <div>
           <div>
             {this.renderDelete()}

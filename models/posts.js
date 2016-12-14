@@ -130,7 +130,7 @@ function deleteComment(req, res, next) {
 }
 
 function getSearchedTag(req, res, next) {
- db.any(`SELECT * FROM tags WHERE group_id = $1 AND name = $2;`, [req.params.groupId, req.params.tag])
+ db.any(`SELECT * FROM posts LEFT JOIN tags ON (posts.id = tags.post_id) WHERE tags.name = $1;`, [req.params.tag])
  .then((data) => {
    res.TagData = data;
    next();

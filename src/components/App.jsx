@@ -499,7 +499,7 @@ class App extends Component {
   }
 
   searchtags(){
-    return fetch(`/posts/tags/${this.state.group_id}/${this.state.searchtagentry}`, {
+    return fetch(`/posts/tagsearch/${this.state.searchtagentry}`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ` + this.state.currentToken

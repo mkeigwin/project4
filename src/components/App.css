@@ -181,7 +181,7 @@ span {
 
 .searchpage {
   position: absolute;
-  width: 85%;
+  width: 90%;
   height: 100%;
   background-color: black;
   transition: width 600ms;
@@ -207,6 +207,13 @@ span {
 .post-container {
   width: 760px;
   margin: 75px auto 75px auto;
+  position: relative;
+  text-align: center;
+}
+
+.tag-post-container {
+  width: 760px;
+  margin: 0 auto 40px auto;
   position: relative;
   text-align: center;
 }
@@ -339,21 +346,29 @@ iframe {
 }
 
 .searchTagsContainer{
-  padding: 15px;
+  padding: 16px;
   width: 129px;
   height: 50px;
   background-color: white;
   color: black;
   margin: 10px auto 0 auto;
   font-size: 14px;
-  border-radius: 5px;
-  box-shadow: inset 0px 0px 10px rgba(0,0,0,1);
+}
+
+.tagsearchinput {
+  margin: 10px 0 0 10px;
 }
 
 .searchtagsbutton{
   cursor: pointer;
   cursor: hand;
-  margin-top: 8px;
+  margin-left: 10px;
+  padding: 5px;
+  width: 36px;
+  border-radius: 5px;
+  font-size: 14px;
+  text-align: center;
+  font-family: sans-serif;
 }
 
 .deleteiconwhite {

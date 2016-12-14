@@ -35,11 +35,6 @@ CREATE TABLE posts (
   created_at TIMESTAMP DEFAULT current_timestamp
 );
 
-CREATE TABLE post_tag_xref (
-  post_id integer REFERENCES posts(id),
-  tag_id integer REFERENCES tags(id),
-  PRIMARY KEY(post_id, tag_id)
-);
 
 CREATE TABLE tags (
   id SERIAL,
@@ -47,6 +42,12 @@ CREATE TABLE tags (
   post_id integer REFERENCES posts(id) ON DELETE CASCADE ON UPDATE CASCADE,
   group_id integer REFERENCES groups(id) ON DELETE CASCADE ON UPDATE CASCADE,
   PRIMARY KEY(name, post_id, group_id)
+);
+
+CREATE TABLE post_tag_xref (
+  post_id integer REFERENCES posts(id),
+  tag_id integer REFERENCES tags(id),
+  PRIMARY KEY(post_id, tag_id)
 );
 
 CREATE TABLE comments (

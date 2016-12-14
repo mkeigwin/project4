@@ -18,7 +18,7 @@ postData.get('/comments/:GroupId', getComments, (req, res) => {
   res.json(res.commentsData || []);
 });
 
-postData.get('/tags/:groupId/:tag', getSearchedTag, (req, res) => {
+postData.get('/tagsearch/:tag', getSearchedTag, (req, res) => {
   res.json(res.TagData || []);
 });
 

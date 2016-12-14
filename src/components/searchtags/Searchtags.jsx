@@ -12,7 +12,7 @@ class Searchtags extends Component {
           <div className="exitblackpage" onClick={()=> this.props.exitblackpage()}>
             <img className="deleteiconwhite" src={this.props.deleteiconwhite} alt=""/>
           </div>
-          <div className="searchTagsContainer">
+          <div>
             <input
               type="text"
               className="tagsearchinput"
@@ -21,9 +21,23 @@ class Searchtags extends Component {
               onChange={this.props.updateSearchTagsInput}
             />
             <div className="searchtagsbutton" onClick={()=>this.props.searchtags()}>
-              search tags
+              search
             </div>
-            <Tagposts />
+            <Tagposts
+              tagsearchdata={this.props.tagsearchdata}
+              searchtagentry={this.props.searchtagentry}
+              updateSearchTagsInput={this.props.updateSearchTagsInput}
+              searchtags={this.props.searchtags}
+              exitblackpage={this.props.exitblackpage}
+              deleteiconwhite={this.props.deleteiconwhite}
+              searchpagecontent={this.props.searchpagecontent}
+              searchbar={this.props.searchbar}
+              searchButton={this.props.searchButton}
+              GroupId={this.props.group_id}
+              postData={this.props.postData}
+              username={this.props.username}
+              handleDeletePostFunctions={this.props.handleDeletePostFunctions}
+            />
           </div>
         </div>
       </div>

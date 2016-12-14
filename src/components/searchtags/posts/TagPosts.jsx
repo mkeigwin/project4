@@ -5,27 +5,24 @@ import TagPostItem from '../posts/postitem/TagPostitem.jsx';
 class Posts extends Component {
 
   renderPosts() {
-      this.props.tagsearchdata.forEach((tag, j)=> {
-        this.props.postData.filter((result, i) => {
-          return result.id === tag.post_id
-          <TagPostItem
-            GroupId={this.props.GroupId}
-            mediaType={result.mediatype}
-            handleDeletePostFunctions={this.props.handleDeletePostFunctions}
-            userUserName={this.props.username}
-            postUserName={result.username}
-            postMedia={result.media}
-            postTimeStamp={result.created_at}
-            postId={result.id}
-            key={i}
-          />
-        })
-      })
-    }
+    return this.props.tagsearchdata.map((result, j) => {
+      return <TagPostItem
+        GroupId={this.props.GroupId}
+        mediaType={result.mediatype}
+        handleDeletePostFunctions={this.props.handleDeletePostFunctions}
+        userUserName={this.props.username}
+        postUserName={result.username}
+        postMedia={result.media}
+        postTimeStamp={result.created_at}
+        postId={result.id}
+        key={j}
+      />
+    })
+  }
 
   render(){
     return (
-      <div>
+      <div className="tag-post-container">
         {this.renderPosts()}
       </div>
     );
