@@ -21,7 +21,7 @@ class MakePost extends Component {
           onChange={this.props.updateFormTags}
         />
         <div className="newPostButton" onClick={this.props.handleNewPost}>
-          post
+          Post
         </div>
       </div>
     );

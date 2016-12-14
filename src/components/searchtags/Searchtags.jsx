@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Tagposts from '../searchtags/posts/TagPosts.jsx';
 
 // create a React Component called _App_
 class Searchtags extends Component {
@@ -19,7 +20,10 @@ class Searchtags extends Component {
               value={this.props.searchtagentry}
               onChange={this.props.updateSearchTagsInput}
             />
-            <div className="searchtagsbutton" onClick={()=>this.props.searchtags()}>search tags</div>
+            <div className="searchtagsbutton" onClick={()=>this.props.searchtags()}>
+              search tags
+            </div>
+            <Tagposts />
           </div>
         </div>
       </div>

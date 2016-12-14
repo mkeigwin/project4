@@ -1,12 +1,14 @@
 const postData = require('express').Router();
 const {
   getPostsFromGroup,
+  getSearchedTag,
   getComments,
-  newPost,
-  newTags,
+  // newPost,
+  // newTags,
   deletePost,
   deleteComment,
-  newComment }  = require('../models/posts');
+  newComment,
+  postTagsandMedia }  = require('../models/posts');
 
 postData.get('/:GroupId', getPostsFromGroup, (req, res) => {
   res.json(res.postData || []);
@@ -16,7 +18,11 @@ postData.get('/comments/:GroupId', getComments, (req, res) => {
   res.json(res.commentsData || []);
 });
 
-postData.post('/newPost', newPost, newTags, (req, res) => {
+postData.get('/tags/:groupId/:tag', getSearchedTag, (req, res) => {
+  res.json(res.TagData || []);
+});
+
+postData.post('/newPost', postTagsandMedia, (req, res) => {
   res.status(200).end();
 });
 

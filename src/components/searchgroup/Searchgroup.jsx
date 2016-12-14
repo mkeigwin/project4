@@ -8,6 +8,9 @@ class Searchgroup extends Component {
         <div onClick={this.props.closegroupsearchwindow}>
           <img className="groupsearchdeleteicon" src={this.props.deleteicon} alt=""/>
         </div>
+        <div className={this.props.checkdisplay}>
+          <img className="checkimage" src={this.props.check} alt=""/>
+        </div>
         <div className="creategroupbar">
           <input
           type="text"
