@@ -17,7 +17,7 @@ class MakePost extends Component {
           className="linkInput"
           type="text"
           placeholder="enter tags"
-          value={this.props.tags}
+          value={this.props.newtags}
           onChange={this.props.updateFormTags}
         />
         <div className="newPostButton" onClick={this.props.handleNewPost}>

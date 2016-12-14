@@ -1,6 +1,5 @@
 BEGIN;
 
-DROP TABLE IF EXISTS post_tags_xref CASCADE;
 DROP TABLE IF EXISTS tags CASCADE;
 DROP TABLE IF EXISTS comments CASCADE;
 DROP TABLE IF EXISTS posts CASCADE;
@@ -37,13 +36,9 @@ CREATE TABLE posts (
 
 CREATE TABLE tags (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(32) NOT NULL
-);
-
-CREATE TABLE post_tags_xref (
-  post_id integer NOT NULL REFERENCES posts(id),
-  tag_id integer NOT NULL REFERENCES tags(id),
-  PRIMARY KEY(post_id, tag_id)
+  name VARCHAR(32) NOT NULL,
+  post_id integer REFERENCES posts(id),
+  group_id integer REFERENCES groups(id)
 );
 
 CREATE TABLE comments (

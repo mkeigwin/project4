@@ -29,7 +29,7 @@ class App extends Component {
       postData: [],
       usergroups: [],
       group_id: '',
-      tags: '',
+      newtags: '',
       username: '',
       signup: {
         username: '',
@@ -144,6 +144,11 @@ class App extends Component {
 
   // ---------- END DANIEL PEASE CODE
 
+  updateFormTags(e){
+    this.setState({
+      newtags: e.target.value
+    })
+  }
 
   updateSearchTagsInput(e){
     this.setState({
@@ -497,8 +502,7 @@ class App extends Component {
         });
       })
       .catch(err => console.log(err));
-    };
-  }
+  };
 
   render(){
     return (
@@ -551,7 +555,7 @@ class App extends Component {
           <MakePost
             newPostContainer={this.state.newPostContainer}
             newPost={this.state.newPostMedia}
-            tags={this.state.tags}
+            newtags={this.state.newtags}
             updateFormNewPost={event => this.updateFormNewPost(event)}
             updateFormTags={event => this.updateFormTags(event)}
             handleNewPost={() => this.handleNewPostFunctions()}

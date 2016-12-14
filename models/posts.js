@@ -11,7 +11,7 @@ function newComment(req, res, next) {
 }
 
 function newTags(req, res, next) {
-  db.none(`INSERT INTO tags (name) VALUES ($1)`, [req.body.tags])
+  db.none(`INSERT INTO tags (name, group_id, post_id) VALUES ($1, $2, $3)`, [req.body.tags, req.body.post_id, req.body.group_id])
     .then(next())
     .catch((err) => {
       console.log(err);
