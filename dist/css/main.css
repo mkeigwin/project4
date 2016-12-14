@@ -278,10 +278,20 @@ iframe {
 }
 
 .searchTagsContainer{
-  width: 300px;
+  padding: 10px;
+  width: 129px;
   height: 50px;
   background-color: white;
   color: black;
+  margin: 10px auto 0 auto;
+  font-size: 13px;
+  box-shadow: 0 0 10px #000000;
+}
+
+.searchtagsbutton{
+  cursor: pointer;
+  cursor: hand;
+  margin-top: 8px;
 }
 
 .deleteiconwhite {

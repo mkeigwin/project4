@@ -29,6 +29,15 @@ function newPost(req, res, next) {
   });
 }
 
+function getTagsData(req, res, next) {
+ db.any(`SELECT * FROM tags WHERE group_id = $1 AND tag = $2 ORDER BY id DESC;`, [req.params.GroupId, req.params.tags])
+ .then((posts) => {
+   res.postData = posts;
+   next();
+ })
+ .catch(error => next(error));
+}
+
 function getPostsFromGroup(req, res, next) {
  db.any(`SELECT * FROM posts WHERE group_id = $1 ORDER BY id DESC;`, [req.params.GroupId])
  .then((posts) => {

@@ -12,8 +12,14 @@ class Searchtags extends Component {
             <img className="deleteiconwhite" src={this.props.deleteiconwhite} alt=""/>
           </div>
           <div className="searchTagsContainer">
-            <input type="text"/>
-            <div className="searchtagsbutton" onClick="searchtags">search tags</div>
+            <input
+              type="text"
+              className="tagsearchinput"
+              placeholder="enter a tag"
+              value={this.props.searchtagentry}
+              onChange={this.props.updateSearchTagsInput}
+            />
+            <div className="searchtagsbutton" onClick={()=>this.props.searchtags()}>search tags</div>
           </div>
         </div>
       </div>

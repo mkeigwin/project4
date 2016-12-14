@@ -17,12 +17,14 @@ class App extends Component {
     this.state = {
       deleteiconwhite: Deleteiconwhite,
       deleteicon: Deleteicon,
+      searchtagentry: '',
       searchGroupName: '',
       createGroupName: '',
       joinGroupId: '',
       newComment: '',
       newPost: '',
       mediaType: '',
+      tagsearchdata: [],
       commentsData: [],
       postData: [],
       usergroups: [],
@@ -143,6 +145,12 @@ class App extends Component {
   // ---------- END DANIEL PEASE CODE
 
 
+  updateSearchTagsInput(e){
+    this.setState({
+      searchtagentry: e.target.value
+    })
+  }
+
   updateFormNewPost(e){
     this.setState({
       newPost: e.target.value
@@ -190,23 +198,23 @@ class App extends Component {
   }
 
   searchGroup(){
-  return fetch(`/usergroups/groups/${this.state.searchGroupName}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ` + this.state.currentToken
-    },
-      method: 'GET'
-    })
-    .then(r => r.json())
-    .then((data) => {
-      console.log('THE DATA FOR SEARCHGROUP IS', data)
-      this.setState({
-        searchGroupName: data[0].name,
-        joinGroupId: data[0].id,
-        clicktojoin: 'clicktojoin'
-      });
-    })
-    .catch(err => console.log(err));
+    return fetch(`/usergroups/groups/${this.state.searchGroupName}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ` + this.state.currentToken
+      },
+        method: 'GET'
+      })
+      .then(r => r.json())
+      .then((data) => {
+        console.log('THE DATA FOR SEARCHGROUP IS', data)
+        this.setState({
+          searchGroupName: data[0].name,
+          joinGroupId: data[0].id,
+          clicktojoin: 'clicktojoin'
+        });
+      })
+      .catch(err => console.log(err));
     }
 
 
@@ -473,6 +481,25 @@ class App extends Component {
     })}, 1100)
   }
 
+  searchtags(tag){
+    return fetch(`/posts/tags/${this.state.group_id}/${tag}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ` + this.state.currentToken
+      },
+        method: 'GET'
+      })
+      .then(r => r.json())
+      .then((data) => {
+        console.log('THE DATA FOR tags IS', data)
+        this.setState({
+          tagsearchdata: data
+        });
+      })
+      .catch(err => console.log(err));
+    };
+  }
+
   render(){
     return (
       <div className="main-container">
@@ -493,6 +520,9 @@ class App extends Component {
           logout={this.logout.bind(this)}
         />
         <Searchtags
+          searchtagentry={this.state.searchtagentry}
+          updateSearchTagsInput={event => this.updateSearchTagsInput(event)}
+          searchtags={this.searchtags.bind(this)}
           exitblackpage={this.exitblackpage.bind(this)}
           deleteiconwhite={this.state.deleteiconwhite}
           searchpagecontent={this.state.searchpagecontent}
