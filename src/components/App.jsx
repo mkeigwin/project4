@@ -54,7 +54,7 @@ class App extends Component {
       groupheaderbutton: 'hidden',
       newPostContainer: 'hidden',
       searchHiddenItems: '',
-      searchbar: 'searchbar',
+      searchbar: 'hidden',
       searchpagecontent: 'hidden',
       checkdisplay: 'hidden'
 
@@ -367,6 +367,7 @@ class App extends Component {
         this.setState({
           postData: data,
           group_id: GroupId,
+          searchbar: 'searchbar',
           newPostContainer: 'newPost'
       });
     })
