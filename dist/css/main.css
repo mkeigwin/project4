@@ -3,31 +3,63 @@
   padding: 0;
 }
 
-header {
+.tagP{
+  display: inline-block;
+  margin-right: 10px;
+  font-family: sans-serif;
+  font-size: 15px;
+}
+
+.tagdisplay {
+  padding-top: 10px;
   position: relative;
-  height: 50px;
-  width: 100%;
-  border: 1px solid black;
-  top: 0;
-  z-index: -5;
+  max-width: 100%;
+  max-height: 18px;
+  overflow: hidden;
+  text-align: center;
 }
 
-span:hover {
-  background-color: white;
-  color: black;
-  border: 1px solid black;
+.inline {
+  display: inline-block;
 }
 
-span {
-  border: 1px solid black;
-  background-color: black;
+textarea:focus, input:focus{
+    outline: none;
+}
+
+input {
+  border: none;
+  padding: 5px;
+  border-bottom: 1px solid black;
+}
+
+input[type="text"]::-webkit-input-placeholder  {
+  -webkit-transition: opacity 0.3s linear;
+  color: gray;
+}
+
+input[type="text"]:focus::-webkit-input-placeholder  {
+  opacity: 0;
+}
+
+.headerinput {
+  margin-top: 20px;
+  width: 225px;
   color: white;
-  margin: 0 4px 0 4px;
-  padding: 2px;
+  line-height: 30px;
+  background-color: #414141;
+  font-size: 19px;
+}
+
+.createbutton {
+  font-family: sans-serif;
+  margin-top: 3px;
   cursor: pointer;
   cursor: hand;
-  -webkit-animation-name: tada;
-  animation-name: tada;
+}
+
+.creategroupbar{
+  font-size: 16px;
 }
 
 .checkdisplay {
@@ -43,19 +75,34 @@ span {
   width: 17px;
 }
 
-.searchgroupsbutton {
-  width: 30px;
-  cursor: pointer;
-  cursor: hand;
+.aboutP{
+  margin-bottom: 8px;
 }
 
-.creategroupbutton {
-  width: 30px;
-  cursor: pointer;
-  cursor: hand;
+.welcomeabout{
+  position: absolute;
+  margin-top: 300px;
+  font-family: sans-serif;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+}
+
+.aboutcontent {
+  position: absolute;
+  margin-top: 200px;
+  font-family: sans-serif;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
 }
 
 .formbutton {
+  margin-top: 10px;
   cursor: pointer;
   cursor: hand;
 }
@@ -83,11 +130,10 @@ span {
   box-shadow: 0 0 10px #fff;
 }
 
-.username-display {
+.username-group-display {
   position: absolute;
-  width: 74px;
   top: 20px;
-  right: 74px;
+  right: 50px;
   font-style: italic;
   font-size: 22px;
 }
@@ -105,7 +151,7 @@ span {
 .registerbutton {
   color: black;
   position: relative;
-  bottom: 64px;
+  bottom: 81px;
   right: -122px;
   cursor: pointer;
   cursor: hand;
@@ -114,42 +160,78 @@ span {
 .loginbutton{
   cursor: pointer;
   cursor: hand;
+  margin-top: 10px;
+}
+
+.newPostButton:hover{
+  font-size: 20px;
 }
 
 .newPostButton{
+  position: absolute;
   cursor: pointer;
   cursor: hand;
-  margin: 12px;
-  border: 1px solid black;
-  padding: 3px;
+  margin-top: 12px;
   background-color: white;
-  font-size: 14px;
+  bottom: 0;
+  right: 0;
+  font-size: 18px;
   width: 30px;
-  text-align: center;
+  font-family: sans-serif;
 }
 
 .linkInput {
-  width: 250px;
+  width: 300px;
+  font-size: 18px;
+  line-height: 23px;
 }
 
 .loginbuttonselect {
   color: black;
   position: relative;
-  bottom: 64px;
-  right: -133px;
+  bottom: 81px;
+  right: -131px;
   cursor: pointer;
   cursor: hand;
 }
 
+.logout {
+  margin-left: 50px;
+  top: 20px;
+  width: 40px;
+}
+
+.leavegroupbutton {
+  margin-left: 50px;
+  top: 20px;
+  width: 84px;
+}
+
+.creategroupbutton {
+  margin-left: 50px;
+  top: 20px;
+  width: 71px;
+}
+
+.creategroupdisplay{
+  position: absolute;
+  left: 110px;
+  top: 43px;
+}
+
 .newPost{
-  text-align: left;
-  margin: 5px auto 0 auto;
-  width: 255px;
-  height: 50px;
-  padding: 10px;
-  border: 1px solid black;
+  position: relative;
+  text-align: right;
+  margin: 0 auto;
+  width: 310px;
+  height: 100px;
   z-index: 5;
-  background-color: white;
+  font-size: 20px;
+}
+
+.usergroupP:hover {
+  letter-spacing: 4px;
+  color: black;
 }
 
 .searchbutton{
@@ -158,16 +240,59 @@ span {
   -ms-transform: rotate(90deg);
   -o-transform: rotate(90deg);
   transform: rotate(90deg);
+  bottom: -65px;
+  width: 47px;
+}
+
+.button:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  bottom: 0;
+  left: 0;
+  background-color: #000;
+  -webkit-transform: scaleX(0);
+  transform: scaleX(0);
+  -webkit-transition: all 0.3s ease-in-out 0s;
+  transition: transform 0.6s cubic-bezier(0, 0.71, 0.41, 1);
+  transform-origin: right center;
+}
+
+.button {
+/*  transform: translateY(0);*/
+  padding-bottom: 6px;
   position: relative;
-  bottom: -50px;
+  display: inline-block;
+  transition-property: color, opacity, transform;
+  transition-duration: .15s,.4s,.4s;
+  transition-timing-function: ease-out, ease-out, cubic-bezier(0,.71,.41,1);
+  transition-delay: 0s, .6599999999999999s, .6599999999999999s;
   cursor: pointer;
   cursor: hand;
+  color: #939499;
+  text-decoration: none;
+  font-family: sans-serif;
+}
+
+.searchbutton:hover {
+  color: black;
+}
+
+.button:hover {
+  color: black;
+}
+
+.button:hover:before {
+  -webkit-transform: scaleX(1);
+  transform: scaleX(1);
+  transform-origin: left center;
 }
 
 .loginContainer {
   position: absolute;
-  background-color: black;
-  margin-top: 10%;
+  background-color: #414141;
+  margin-top: 150px;
   left: 0;
   right: 0;
   margin-left: auto;
@@ -180,10 +305,9 @@ span {
 }
 
 .searchpage {
-  position: absolute;
-  width: 90%;
+  width: 100%;
   height: 100%;
-  background-color: black;
+  background-color: #414141;
   transition: width 600ms;
   box-shadow: 3px 5px 8px -1px rgba( 15, 15, 15, .8 ), -3px 5px 8px -1px rgba( 15, 15, 15, .8 );
 }
@@ -193,13 +317,11 @@ span {
 }
 
 .searchbar {
-  position: fixed;
+  position: absolute;
   height: 150px;
   width: 50px;
-  background-color: black;
-  color: white;
   left: 0;
-  bottom: 0;
+  top: 0;
   z-index: 5;
   transition: width 600ms;
 }
@@ -209,6 +331,15 @@ span {
   margin: 75px auto 75px auto;
   position: relative;
   text-align: center;
+  padding: 30px;
+}
+
+.post-seperator {
+  margin-top: 15px;
+  position: relative;
+  width: 100%;
+  height: 4px;
+  background-color: black;
 }
 
 .tag-post-container {
@@ -219,6 +350,7 @@ span {
 }
 
 .timestamp {
+  margin-bottom: 7px;
   font-size: 12px;
 }
 
@@ -247,9 +379,15 @@ iframe {
   cursor: hand;
 }
 
+.groupname-display {
+  font-family: "Arial Black", Gadget, sans-serif
+}
+
 .groupSelection {
+  color: #939499;
   position: absolute;
-  top: 50px;
+  text-align: right;
+  top: 60px;
   right: 50px;
   font-family: sans-serif;
   text-decoration: overline;
@@ -326,6 +464,10 @@ iframe {
   text-align: left;
 }
 
+.comment-wrapper{
+  margin-top: 7px;
+}
+
 .comment-text {
   position: relative;
   font-size: 14px;
@@ -337,7 +479,7 @@ iframe {
 
 .exitblackpage {
   position: absolute;
-  top: 30px;
+  top: 50px;
   right: 30px;
   width: 25px;
   height: 25px;
@@ -356,18 +498,16 @@ iframe {
 }
 
 .tagsearchinput {
-  margin: 10px 0 0 10px;
+  margin: 20px 0 0 25px;
 }
 
 .searchtagsbutton{
+  margin-top: 8px;
   cursor: pointer;
   cursor: hand;
-  margin-left: 10px;
-  padding: 5px;
+  margin-left: 30px;
   width: 36px;
-  border-radius: 5px;
   font-size: 14px;
-  text-align: center;
   font-family: sans-serif;
 }
 

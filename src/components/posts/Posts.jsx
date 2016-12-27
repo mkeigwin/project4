@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import PostItem from '../posts/postitem/PostItem.jsx';
 
-// create a React Component called _App_
 class Posts extends Component {
-
-
 
   renderPosts() {
     return this.props.postData.map((result, i) =>

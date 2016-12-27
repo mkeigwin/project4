@@ -20,9 +20,10 @@ CREATE TABLE users (
 );
 
 CREATE TABLE usergroups (
-  id SERIAL PRIMARY KEY,
+  id SERIAL,
   username varchar REFERENCES users(username) ON DELETE CASCADE ON UPDATE CASCADE,
-  group_id integer REFERENCES groups(id) ON DELETE CASCADE ON UPDATE CASCADE
+  groupname varchar REFERENCES groups(name) ON DELETE CASCADE ON UPDATE CASCADE,
+  PRIMARY KEY(username, groupname)
 );
 
 CREATE TABLE posts (

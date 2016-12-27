@@ -7,6 +7,8 @@ export default class PostItem extends Component {
   renderComments(){
     return this.props.commentsData.map((result, i) => {
       return <Comments
+        userUserName={this.props.userUserName}
+        postUserName={this.props.postUserName}
         postId={this.props.postId}
         username={result.username}
         commentPostId={result.post_id}
@@ -15,8 +17,7 @@ export default class PostItem extends Component {
         key={i}
         deleteComment={this.props.deleteComment}
       />
-    }
-    )
+    })
   }
 
   renderDelete(){
@@ -35,7 +36,7 @@ export default class PostItem extends Component {
     if (this.props.mediaType === 'youtube'){
       const link = this.props.postMedia;
       const parsedLink = link.slice(-11);
-      return <iframe className="posted-video" id="ytplayer" type="text/html" width="750" height="422"
+      return <iframe className="posted-video" id="ytplayer" type="text/html" width="650" height="366"
       src={`https://www.youtube.com/embed/${parsedLink}?autoplay=0&origin=http://example.com`}
       frameborder="0" />
     }
@@ -46,7 +47,7 @@ export default class PostItem extends Component {
       const link = this.props.postMedia;
       const parsedLink = link.slice(-9)
       console.log(parsedLink);
-      return <iframe className="posted-video" src={`https://player.vimeo.com/video/${parsedLink}`} width="750" height="422" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen />
+      return <iframe className="posted-video" src={`https://player.vimeo.com/video/${parsedLink}`} width="650" height="366" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen />
     }
   }
 
@@ -54,31 +55,30 @@ export default class PostItem extends Component {
     return (
       <div className="post-container">
         <div>
-          <div>
-            {this.renderDelete()}
-          </div>
-          <p className="postUserName">{this.props.postUserName}</p>
-          <p className="timestamp">{this.props.postTimeStamp}</p>
-          <div>
-            {this.renderMedia()}
-          </div>
-          <div className="comment-input-field">
-            <textarea
-            type="text"
-            className="leaveComment-input"
-            contenteditable="true"
-            placeholder="leave a comment"
-            value={this.props.newComment}
-            onChange={this.props.updateFormNewComment}
-            />
-            <div className="newCommentButton" onClick={() => this.props.handleNewCommentFunctions(this.props.postId)}>
-              Post
-            </div>
-          </div>
-          <div>
-            {this.renderComments()}
+          {this.renderDelete()}
+        </div>
+        <p className="postUserName">{this.props.postUserName}</p>
+        <p className="timestamp">{this.props.postTimeStamp}</p>
+        <div>
+          {this.renderMedia()}
+        </div>
+        <div className="comment-input-field">
+          <textarea
+          type="text"
+          className="leaveComment-input"
+          contenteditable="true"
+          placeholder="leave a comment"
+          value={this.props.newComment}
+          onChange={this.props.updateFormNewComment}
+          />
+          <div className="newCommentButton" onClick={() => this.props.handleNewCommentFunctions(this.props.postId)}>
+            post
           </div>
         </div>
+        <div>
+          {this.renderComments()}
+        </div>
+        <div className="post-seperator"/>
       </div>
     );
   }

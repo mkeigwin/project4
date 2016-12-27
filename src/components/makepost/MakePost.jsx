@@ -10,18 +10,18 @@ class MakePost extends Component {
           className="linkInput"
           type="text"
           placeholder="enter a link to share"
-          value={this.props.newPostMedia}
+          value={this.props.newPost}
           onChange={this.props.updateFormNewPost}
         />
         <input
           className="linkInput"
           type="text"
-          placeholder="enter tags"
+          placeholder="enter tags (e.g. jazz, chicago)"
           value={this.props.newtags}
           onChange={this.props.updateFormTags}
         />
         <div className="newPostButton" onClick={this.props.handleNewPost}>
-          Post
+          post
         </div>
       </div>
     );

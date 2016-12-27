@@ -11,8 +11,8 @@ function createGroup(req, res, next){
 }
 
 function joinGroup(req, res, next){
-  console.log('JOINING GROUP', req.body)
-  db.none(`INSERT INTO usergroups (username, group_id) VALUES ($1, $2)`, [req.body.username, req.body.group_id])
+  console.log('JOINING GROUP', req.body.groupname)
+  db.none(`INSERT INTO usergroups (username, groupname) VALUES ($1, $2)`, [req.body.username, req.body.groupname])
     .then(next())
     .catch((err) => {
       console.log(err);
@@ -22,7 +22,7 @@ function joinGroup(req, res, next){
 
 function getUserGroups(req, res, next) {
   console.log('the queried username is:', req.params.username )
- db.any('SELECT name, group_id FROM groups LEFT JOIN usergroups ON (groups.id = usergroups.group_id) WHERE username = $1;', [req.params.username])
+ db.any('SELECT groups.name, groups.id FROM groups LEFT JOIN usergroups ON (groups.name = usergroups.groupname) WHERE username = $1;', [req.params.username])
  .then((usergroups) => {
    res.usergroups = usergroups;
    next();

@@ -4,9 +4,10 @@ import Loginbox from './loginbox/Loginbox.jsx';
 import GroupSelect from './groupselect/Groupselect.jsx'
 import MakePost from './makepost/MakePost.jsx';
 import Searchtags from './searchtags/Searchtags.jsx';
-import Searchgroup from './searchgroup/Searchgroup.jsx';
+import Creategroup from './creategroup/Creategroup.jsx';
 import Deleteicon from '../images/deleteicon.png';
 import Check from '../images/check.png';
+import About from './about/About.jsx'
 import Deleteiconwhite from '../images/deleteiconwhite.png';
 import './App.css';
 
@@ -19,6 +20,7 @@ class App extends Component {
       deleteiconwhite: Deleteiconwhite,
       deleteicon: Deleteicon,
       check: Check,
+      groupname: '',
       searchtagentry: '',
       searchGroupName: '',
       createGroupName: '',
@@ -30,6 +32,7 @@ class App extends Component {
       commentsData: [],
       postData: [],
       usergroups: [],
+      tags: [],
       group_id: '',
       newtags: '',
       username: '',
@@ -49,15 +52,19 @@ class App extends Component {
       signUpFormDisplay: 'hidden',
       logInFormDisplay: 'form-container',
       loginContainer: 'loginContainer',
-      searchjoingroupbar: 'hidden',
-      clicktojoin: 'hidden',
-      groupheaderbutton: 'hidden',
       newPostContainer: 'hidden',
       searchHiddenItems: '',
       searchbar: 'hidden',
       searchpagecontent: 'hidden',
-      checkdisplay: 'hidden'
-
+      creategroupdisplay: 'hidden',
+      creategroupbutton: 'hidden',
+      leavegroupbutton: 'hidden',
+      joingroupdisplay: 'hidden',
+      leavegroupdisplay: 'hidden',
+      headerdisplay: 'hidden',
+      aboutcontentdisplay: 'hidden',
+      tagdisplay: 'tagdisplay',
+      welcomeabout: 'welcomeabout'
   };
 }
 
@@ -128,9 +135,15 @@ class App extends Component {
     .then((data) => {
       this.setState({
         currentToken: data,
+        searchbar: 'searchbar',
         loginContainer: 'hidden',
-        groupheaderbutton: 'groupheaderbutton',
+        headerdisplay: '',
+        welcomeabout: 'hidden',
         username: this.state.loginForm.username,
+        searchbarbutton: 'searchbutton button',
+        creategroupbutton: 'creategroupbutton button',
+        leavegroupbutton: 'leavegroupbutton button',
+        aboutcontentdisplay: 'aboutcontent',
         loginForm: {
           username: '',
           password: ''
@@ -139,11 +152,10 @@ class App extends Component {
     })
   }
 
-  logout() {
+  logout(){
     this.setState({
-      currentToken: '',
-    }, () => {
-      console.log('after logout ', this.state)
+      aboutcontentdisplay: 'hidden',
+      currentToken: ''
     })
   }
 
@@ -184,21 +196,12 @@ class App extends Component {
         groupname: this.state.createGroupName
       })
     })
-    .then(this.setState({
-      checkdisplay: 'checkdisplay'
-    }))
+    .then(this.joinGroupFetch())
     .catch(err => console.log(err));
   }
 
-  joinGroup(){
-    this.joinGroupFetch();
-    setTimeout(()=> {
-      this.getUserGroups();
-    }, )
-  }
-
   joinGroupFetch(){
-    console.log('joining group', this.state.joinGroupId)
+    console.log('joining group', this.state.searchGroupName)
     fetch('/usergroups/joinGroup', {
       headers: {
         'Content-Type': 'application/json',
@@ -207,12 +210,15 @@ class App extends Component {
       method: 'POST',
       body: JSON.stringify({
         username: this.state.username,
-        group_id: this.state.joinGroupId
+        groupname: this.state.createGroupName
       })
     })
     .then(this.setState({
-      joinGroupId: ''
+      joinGroupId: '',
+      createGroupName: '',
+      creategroupdisplay: 'hidden'
     }))
+    .then(this.getUserGroups())
     .catch(err => console.log(err));
   }
 
@@ -226,11 +232,10 @@ class App extends Component {
       })
       .then(r => r.json())
       .then((data) => {
-        console.log('THE DATA FOR SEARCHGROUP IS', data)
         this.setState({
+          aboutcontentdisplay: 'hidden',
           searchGroupName: data[0].name,
-          joinGroupId: data[0].id,
-          clicktojoin: 'clicktojoin'
+          joinGroupId: data[0].id
         });
       })
       .catch(err => console.log(err));
@@ -290,7 +295,7 @@ class App extends Component {
     })
     .then(this.setState({
       newPost: '',
-      tags: ''
+      newtags: ''
     }))
     .catch(err => console.log(err));
   };
@@ -331,6 +336,8 @@ class App extends Component {
     this.deletePost(postId);
   }
 
+
+
   getUserGroups() {
     console.log('gettinguserGroups')
   return fetch(`/usergroups/${this.state.username}`, {
@@ -342,6 +349,7 @@ class App extends Component {
     })
     .then(r => r.json())
     .then((data) => {
+      console.log('the usergroup data is', data)
       this.setState({
         usergroups: data
       });
@@ -349,9 +357,13 @@ class App extends Component {
     .catch(err => console.log(err));
     }
 
-  handleChooseGroupFunctions(GroupId){
+  handleChooseGroupFunctions(GroupId, groupname){
     this.handleComments(GroupId);
     this.handleChooseGroup(GroupId);
+    this.setState({
+      groupname: groupname,
+      aboutcontentdisplay: 'hidden'
+    })
   }
 
   handleChooseGroup(GroupId){
@@ -364,10 +376,10 @@ class App extends Component {
       })
       .then(r => r.json())
       .then((data) => {
+        console.log('this is the data for choosegroup', data)
         this.setState({
           postData: data,
           group_id: GroupId,
-          searchbar: 'searchbar',
           newPostContainer: 'newPost'
       });
     })
@@ -466,25 +478,17 @@ class App extends Component {
     })
   }
 
-  opengroupfinder(){
-    this.setState({
-      searchjoingroupbar: 'searchjoingroupbar'
-    })
-  }
-
-  closegroupsearchwindow(){
-    this.setState({
-      searchjoingroupbar: 'hidden',
-      checkdisplay: 'hidden'
-    })
-  }
-
   searchButton(){
+    this.getTags()
     this.setState({
       searchHiddenItems: 'hidden',
-      searchbar: 'searchpage'
+      headerdisplay: 'hidden',
+      searchbar: 'searchpage',
+      aboutcontentdisplay: 'hidden',
+      tagdisplay: 'tagdisplay'
     })
     setTimeout(()=>{this.setState({
+      searchbarbutton: 'hidden',
       searchpagecontent: 'searchpagecontent'
     })}, 1100)
   }
@@ -492,12 +496,32 @@ class App extends Component {
   exitblackpage(){
     this.setState({
       searchpagecontent: 'hidden',
-      searchbar: 'searchbar'
+      searchbar: 'searchbar',
+      headerdisplay: '',
+      searchbarbutton: 'searchbutton button'
     })
     setTimeout(()=>{this.setState({
       searchHiddenItems: ''
     })}, 1100)
   }
+
+  getTags(){
+    return fetch(`/posts/gettags`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ` + this.state.currentToken
+      },
+        method: 'GET'
+      })
+      .then(r => r.json())
+      .then((data) => {
+        console.log('THE DATA FOR tags IS', data)
+        this.setState({
+          tags: data
+        });
+      })
+      .catch(err => console.log(err));
+  };
 
   searchtags(){
     return fetch(`/posts/tagsearch/${this.state.searchtagentry}`, {
@@ -509,7 +533,6 @@ class App extends Component {
       })
       .then(r => r.json())
       .then((data) => {
-        console.log('THE DATA FOR tags IS', data)
         this.setState({
           tagsearchdata: data
         });
@@ -517,10 +540,97 @@ class App extends Component {
       .catch(err => console.log(err));
   };
 
+  showcreategroup(){
+    if (this.state.creategroupdisplay == 'creategroupdisplay'){
+      this.setState({
+        creategroupdisplay: 'hidden'
+      })
+      return
+    }
+    this.setState({
+      creategroupdisplay: 'creategroupdisplay'
+    })
+    console.log('clicked create group')
+  }
+
+  showleavegroup(){
+    if (this.state.showleavegroup == 'showleavegroup'){
+      this.setState({
+        leavegroupdisplay: 'hidden'
+      })
+      return
+    }
+    this.setState({
+      leavegroupdisplay: 'leavegroupdisplay'
+    })
+  }
+
+  showjoingroup(){
+    if (this.state.joingroupdisplay == 'joingroupdisplay'){
+      this.setState({
+        joingroupdisplay: 'hidden'
+      })
+      return
+    }
+    this.setState({
+      joingroupdisplay: 'joingroupdisplay'
+    })
+    console.log('clicked join group')
+  }
+
   render(){
     return (
       <div className="main-container">
-        <p className="username-display">{this.state.username}</p>
+        <header>
+          <div className={this.state.headerdisplay}>
+            <div className="username-group-display">
+              <p className="username-display">{this.state.username}  <span className="groupname-display">{this.state.groupname}</span></p>
+            </div>
+            <div className="logout button" onClick={this.logout.bind(this)}>logout</div>
+            <GroupSelect
+              userGroupSelectDisplay={this.state.userGroupSelectDisplay}
+              usergroups={this.state.usergroups}
+              handleChooseGroupFunctions={this.handleChooseGroupFunctions.bind(this)}
+            />
+            <Creategroup
+              leavegroupbutton={this.state.leavegroupbutton}
+              showleavegroup={this.showleavegroup.bind(this)}
+              showcreategroup={this.showcreategroup.bind(this)}
+              check={this.state.check}
+              creategroupdisplay={this.state.creategroupdisplay}
+              checkdisplay={this.state.checkdisplay}
+              trackCreateGroup={event => this.trackCreateGroup(event)}
+              creategroup={this.createGroup.bind(this)}
+              creategroupbutton={this.state.creategroupbutton}
+            />
+            <MakePost
+              newPostContainer={this.state.newPostContainer}
+              newPost={this.state.newPost}
+              newtags={this.state.newtags}
+              updateFormNewPost={event => this.updateFormNewPost(event)}
+              updateFormTags={event => this.updateFormTags(event)}
+              handleNewPost={() => this.handleNewPostFunctions()}
+            />
+          </div>
+          <Searchtags
+            tagdisplay={this.state.tagdisplay}
+            tags={this.state.tags}
+            searchbarbutton={this.state.searchbarbutton}
+            tagsearchdata={this.state.tagsearchdata}
+            searchtagentry={this.state.searchtagentry}
+            updateSearchTagsInput={event => this.updateSearchTagsInput(event)}
+            searchtags={this.searchtags.bind(this)}
+            exitblackpage={this.exitblackpage.bind(this)}
+            deleteiconwhite={this.state.deleteiconwhite}
+            searchpagecontent={this.state.searchpagecontent}
+            searchbar={this.state.searchbar}
+            searchButton={this.searchButton.bind(this)}
+            GroupId={this.state.group_id}
+            postData={this.state.postData}
+            username={this.state.username}
+            handleDeletePostFunctions={this.handleDeletePostFunctions.bind(this)}
+          />
+        </header>
         <Loginbox
           username={this.state.username}
           signUpFormDisplay={this.state.signUpFormDisplay}
@@ -536,50 +646,7 @@ class App extends Component {
           handleLoginFuntions={this.handleLoginFuntions.bind(this)}
           logout={this.logout.bind(this)}
         />
-        <Searchtags
-          tagsearchdata={this.state.tagsearchdata}
-          searchtagentry={this.state.searchtagentry}
-          updateSearchTagsInput={event => this.updateSearchTagsInput(event)}
-          searchtags={this.searchtags.bind(this)}
-          exitblackpage={this.exitblackpage.bind(this)}
-          deleteiconwhite={this.state.deleteiconwhite}
-          searchpagecontent={this.state.searchpagecontent}
-          searchbar={this.state.searchbar}
-          searchButton={this.searchButton.bind(this)}
-          GroupId={this.state.group_id}
-          postData={this.state.postData}
-          username={this.state.username}
-          handleDeletePostFunctions={this.handleDeletePostFunctions.bind(this)}
-        />
-        <GroupSelect
-          userGroupSelectDisplay={this.state.userGroupSelectDisplay}
-          usergroups={this.state.usergroups}
-          handleChooseGroupFunctions={this.handleChooseGroupFunctions.bind(this)}
-        />
         <div className={this.state.searchHiddenItems}>
-          <div className={this.state.groupheaderbutton} onClick={() => this.opengroupfinder()}>create/find a group</div>
-          <Searchgroup
-            checkdisplay={this.state.checkdisplay}
-            check={this.state.check}
-            closegroupsearchwindow={()=> this.closegroupsearchwindow()}
-            deleteicon={this.state.deleteicon}
-            clicktojoin={this.state.clicktojoin}
-            searchjoingroupbar={this.state.searchjoingroupbar}
-            joinGroup={this.joinGroup.bind(this)}
-            searchGroupName={this.state.searchGroupName}
-            searchGroup={this.searchGroup.bind(this)}
-            trackSearchGroup={this.trackSearchGroup.bind(this)}
-            createGroup={this.createGroup.bind(this)}
-            trackCreateGroup={this.trackCreateGroup.bind(this)}
-          />
-          <MakePost
-            newPostContainer={this.state.newPostContainer}
-            newPost={this.state.newPostMedia}
-            newtags={this.state.newtags}
-            updateFormNewPost={event => this.updateFormNewPost(event)}
-            updateFormTags={event => this.updateFormTags(event)}
-            handleNewPost={() => this.handleNewPostFunctions()}
-          />
           <Posts
             GroupId={this.state.group_id}
             newComment={this.state.newComment}
@@ -592,6 +659,10 @@ class App extends Component {
             deleteComment={this.deleteComment.bind(this)}
           />
         </div>
+        <About
+          welcomeabout={this.state.welcomeabout}
+          aboutcontentdisplay={this.state.aboutcontentdisplay}
+        />
       </div>
    );
  }

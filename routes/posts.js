@@ -3,16 +3,12 @@ const {
   getPostsFromGroup,
   getSearchedTag,
   getComments,
-  // newPost,
-  // newTags,
   deletePost,
+  getTagData,
   deleteComment,
   newComment,
   postTagsandMedia }  = require('../models/posts');
 
-postData.get('/:GroupId', getPostsFromGroup, (req, res) => {
-  res.json(res.postData || []);
-});
 
 postData.get('/comments/:GroupId', getComments, (req, res) => {
   res.json(res.commentsData || []);
@@ -21,6 +17,10 @@ postData.get('/comments/:GroupId', getComments, (req, res) => {
 postData.get('/tagsearch/:tag', getSearchedTag, (req, res) => {
   res.json(res.TagData || []);
 });
+
+postData.get('/gettags', getTagData, (req, res) => {
+  res.json(res.tagData || []);
+})
 
 postData.post('/newPost', postTagsandMedia, (req, res) => {
   res.status(200).end();
@@ -37,5 +37,9 @@ postData.delete('/comment/:CommentId', deleteComment, (req, res) => {
 postData.post('/newComment', newComment, (req, res) => {
   res.status(200).end();
 })
+
+postData.get('/:GroupId', getPostsFromGroup, (req, res) => {
+  res.json(res.postData || []);
+});
 
 module.exports = postData

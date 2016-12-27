@@ -69,24 +69,15 @@ function newComment(req, res, next) {
   });
 }
 
-// function newTags(req, res, next) {
-//   db.none(`INSERT INTO tags (name, group_id, post_id) VALUES ($1, $2, $3)`, [req.body.tags, req.body.post_id, req.body.group_id])
-//     .then(next())
-//     .catch((err) => {
-//       console.log(err);
-//       next(err);
-//   });
-// }
-
-// function newPost(req, res, next) {
-//   console.log(req.body)
-//   db.none(`INSERT INTO posts (group_id, username, media, mediatype) VALUES ($1, $2, $3, $4)`, [req.body.group_id, req.body.username, req.body.newPost, req.body.mediaType])
-//     .then(next())
-//     .catch((err) => {
-//       console.log(err);
-//       next(err);
-//   });
-// }
+function getTagData(req, res, next) {
+  console.log('getting tag data on backend')
+  db.any(`SELECT name FROM tags;`)
+   .then((posts) => {
+     res.tagData = posts;
+     next();
+   })
+   .catch(error => next(error));
+}
 
 function getTagsData(req, res, next) {
  db.any(`SELECT * FROM tags WHERE group_id = $1 AND tag = $2 ORDER BY id DESC;`, [req.params.GroupId, req.params.tags])
@@ -143,9 +134,8 @@ module.exports = {
   getPostsFromGroup,
   getSearchedTag,
   getComments,
-  // newPost,
-  // newTags,
   deletePost,
+  getTagData,
   deleteComment,
   newComment,
   postTagsandMedia
